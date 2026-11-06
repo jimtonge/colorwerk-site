@@ -273,6 +273,17 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
 .fm h2{font-weight:500;font-size:clamp(30px,3.4vw,42px);letter-spacing:.16em;margin:8px 0 0;line-height:1.1}
 .fm-bar{display:block;width:64px;height:3px;background:var(--c);margin:22px 0 26px}
 .fm-desc{margin:0 0 30px;font-size:17px;line-height:1.55;color:var(--ink-soft);max-width:36ch}
+.fm-desc a{color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;white-space:nowrap}
+.fm-desc a:hover{text-decoration-thickness:2px}
+.fm-ar{all:unset;display:none;position:absolute;top:48.7%;width:34px;height:48px;margin-top:-24px;place-items:center;cursor:pointer;color:var(--ink);opacity:.38;transition:opacity .2s;-webkit-tap-highlight-color:transparent}
+.fm-ar.p{left:0}.fm-ar.n{right:0}
+.fm-ar:hover,.fm-ar:active{opacity:.8}
+.fm-ar:focus-visible{outline:2px solid var(--ink);outline-offset:-2px;opacity:.8}
+@media (max-width:640px){.fm-ar{display:grid}}
+.fm-in.s-n{animation:fm-sn .28s ease}.fm-in.s-p{animation:fm-sp .28s ease}
+@keyframes fm-sn{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes fm-sp{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fm-in.s-n,.fm-in.s-p{animation:none}}
 .fm-chips{list-style:none;margin:0 0 36px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .fm-chips li{border:1px solid #cfc9c2;padding:8px 12px;font-size:13px;line-height:1.2;font-variant-numeric:tabular-nums}
 .fm-chips.is-soon li{border-style:dashed;color:var(--ink-soft)}
@@ -510,7 +521,7 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
 <dialog class="fm" id="fm" aria-labelledby="fm-name">
   <button class="fm-x" id="fm-x" aria-label="Close"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 2l14 14M16 2 2 16"/></svg></button>
   <div class="fm-in">
-    <div class="fm-art"><div class="device"><span class="tpl" id="fm-tpl"></span><div class="screen"><img id="fm-img" alt=""><div class="ph" id="fm-ph" hidden><span></span><small></small></div></div></div><div class="fm-vars" id="fm-vars" hidden></div><button type="button" class="fm-wake" id="fm-wake" hidden><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>AOD to wake</button></div>
+    <div class="fm-art"><div class="device"><span class="tpl" id="fm-tpl"></span><div class="screen"><img id="fm-img" alt=""><div class="ph" id="fm-ph" hidden><span></span><small></small></div></div><button type="button" class="fm-ar p" id="fm-ar-p" aria-label="Previous face"><svg viewBox="0 0 10 18" width="10" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 1.5 1.5 9l7 7.5"/></svg></button><button type="button" class="fm-ar n" id="fm-ar-n" aria-label="Next face"><svg viewBox="0 0 10 18" width="10" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 1.5 8.5 9l-7 7.5"/></svg></button></div><div class="fm-vars" id="fm-vars" hidden></div><button type="button" class="fm-wake" id="fm-wake" hidden><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>AOD to wake</button></div>
     <div class="fm-body">
       <div class="fm-code" id="fm-code"></div>
       <h2 id="fm-name"></h2>
@@ -549,6 +560,9 @@ const FACES = {
   "lunar":{"code": "CW·11", "name": "LUNAR", "pro": false, "c": "var(--cw-pink)", "store": "https://apps.garmin.com/apps/a63bbabb-e834-4d83-b453-fdd2d99cbc9a", "desc": "A large, detailed Moon that follows the real phase, with moonrise and the next full moon.", "spec": ["Live moon phase", "Moonrise", "Next full moon", "Wake animation", "Hemisphere aware", "8 languages", "AMOLED"],"wake":true}
 };
 const ORDER = Object.keys(FACES); // same order as the grid
+// free <-> Pro pairs, linked from each other's popup copy
+const PAIR = {folio:'folio-pro','folio-pro':'folio', versal:'versal-pro','versal-pro':'versal', fahrplan:'fahrplan-pro','fahrplan-pro':'fahrplan', raster:'raster-pro','raster-pro':'raster'};
+const PAIR_TEXT = {folio:'Want a ring of data around it? See', versal:'Want data slots as well? See', fahrplan:'Want data slots and more hand styles? See', raster:'Want a big data slot and more layouts? See'};
 const dlg = document.getElementById('fm');
 const $ = id => document.getElementById(id);
 let current = null;
@@ -575,7 +589,14 @@ function fill(id){
     vars.append(b);
   });
   $('fm-wake').hidden = !f.wake;
-  $('fm-desc').textContent = f.desc || 'Details coming soon.';
+  const d = $('fm-desc'); d.textContent = f.desc || 'Details coming soon.';
+  const pr = PAIR[id];
+  if(pr){                                   // free <-> Pro cross-link, written into the copy
+    const o = FACES[pr], a = document.createElement('a');
+    a.href = '#' + pr; a.dataset.face = pr;
+    a.textContent = o.name + (o.pro ? ' PRO' : '');
+    d.append(' ', f.pro ? 'Prefer it simpler? There\u2019s a free ' : PAIR_TEXT[id] + ' ', a, '.');
+  }
   const chips = f.spec.length ? f.spec : ['Specs coming soon'];
   $('fm-spec').innerHTML = ''; $('fm-spec').classList.toggle('is-soon', !f.spec.length);
   chips.forEach(s => { const li = document.createElement('li'); li.textContent = s; $('fm-spec').append(li); });
@@ -621,8 +642,23 @@ $('fm-wake').addEventListener('click', () => {
   wakeTimer = setTimeout(() => { img.src = img.dataset.still; delete img.dataset.still; }, WAKE_MS);
 });
 dlg.addEventListener('close', () => { clearTimeout(wakeTimer); const img = $('fm-img'); if(img.dataset.still){ img.src = img.dataset.still; delete img.dataset.still; } });
-$('fm-prev').addEventListener('click', e => openFace(e.currentTarget.dataset.go));
-$('fm-next').addEventListener('click', e => openFace(e.currentTarget.dataset.go));
+function slide(d){ const el = document.querySelector('.fm-in'); el.classList.remove('s-n','s-p'); void el.offsetWidth; el.classList.add(d > 0 ? 's-n' : 's-p'); }
+$('fm-prev').addEventListener('click', e => { slide(-1); openFace(e.currentTarget.dataset.go); });
+$('fm-next').addEventListener('click', e => { slide(1); openFace(e.currentTarget.dataset.go); });
+$('fm-ar-p').addEventListener('click', () => $('fm-prev').click());   // side arrows (phones) reuse the bottom buttons
+$('fm-ar-n').addEventListener('click', () => $('fm-next').click());
+// swipe between faces: mostly-horizontal drag of 60px+ (left = next, right = previous); vertical scrolling is untouched
+let sx = null, sy = 0;
+dlg.addEventListener('touchstart', e => { if(e.touches.length !== 1){ sx = null; return; } sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+dlg.addEventListener('touchend', e => {
+  if(sx === null) return;
+  const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null;
+  if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6) (dx < 0 ? $('fm-next') : $('fm-prev')).click();
+}, {passive:true});
+$('fm-desc').addEventListener('click', e => {   // free <-> Pro link inside the copy
+  const a = e.target.closest('a[data-face]'); if(!a) return;
+  e.preventDefault(); slide(FACES[a.dataset.face].pro ? 1 : -1); openFace(a.dataset.face);
+});
 // click on the backdrop lands on the <dialog> itself, since .fm-in fills the whole box
 dlg.addEventListener('click', e => { if(e.target === dlg) closeFace(); });
 $('fm-get').addEventListener('click', e => { if($('fm-get').classList.contains('is-soon')) e.preventDefault(); });
