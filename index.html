@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="colorwerk● — watch faces for Garmin, designed in Kreuzberg, Berlin.">
+<title>colorwerk● Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;700;800&display=swap">
+<style>
+/* Layout: full-bleed photo hero → intro split → 4-up Pro grid → Kreuzberg studio band → Free faces rail → alerts sign-up → footer.
+   Single light theme on purpose — watch renders are photographed on this paper tone, so a dark mode would box them in. */
+:root{
+  --paper:#f2eeea;       /* sampled from the mockup background so watch crops sit seamlessly */
+  --ink:#1d1c1a;
+  --ink-soft:#3a3835;
+  --hair:#d7d2cd;
+  /* brand palette, sampled from the logo card (olive ground + 4-colour stripe) */
+  --olive:#313c2d;
+  --bone:#edebe6;
+  --cw-orange:#f5a93a;
+  --cw-cyan:#57c0d4;
+  --cw-pink:#ef607e;
+  --cw-black:#0e0e0c;
+  --cw-mono:var(--ink);  /* accent for the black-and-white faces: follows the ink so it flips at night */
+  /* per-face accent underlines, each face takes one stripe colour */
+  --raster:var(--cw-cyan);
+  --folio:var(--cw-orange);
+  --versal:var(--cw-pink);
+  --radius:var(--cw-black);
+  --font:"Albert Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --wrap:1180px;
+  /* masthead sizing: stripe height is derived from these so it always ends at the logo baseline */
+  --nav-pad:22px;
+  --logo-h:16px;
+  --stripe-w:9px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+
+/* logo: traced from the brand card, single path in currentColor so it recolours per surface */
+.logo{display:inline-flex;color:inherit}
+.wordmark{height:var(--logo-h);width:auto;display:block}
+
+/* ---------- hero ---------- */
+.hero{position:relative;color:var(--ink);--hero-img:url(assets/hero-day.jpg);--hx:.72;background:#7b7976 var(--hero-img) calc(var(--hx) * 100%) 50%/cover no-repeat;min-height:clamp(480px,60vw,720px);display:flex;flex-direction:column}
+.nav{display:flex;align-items:center;justify-content:space-between;padding-block:var(--nav-pad);color:var(--ink);width:100%; /* ink = black by day, bone at night */
+  /* nav ignores the centred wrap: logo locks up beside the stripe at every width */
+  max-width:none;padding-left:calc(var(--stripe-w) + 14px + env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+/* 4-colour brand stripe, bleeding off the far left of the masthead (lifted from the logo card) */
+.hero::after{z-index:3;content:"";position:absolute;top:0;left:0;width:var(--stripe-w);height:calc(2 * var(--nav-pad) + var(--logo-h)); /* full nav-bar height, so the cyan/pink join lands on the logo midline */background:linear-gradient(var(--cw-orange) 0 25%,var(--cw-cyan) 0 50%,var(--cw-pink) 0 75%,var(--cw-black) 0)}  /* no extra nav padding: the 24px gutter already clears the stripe and keeps the logo aligned with the headline */
+.nav ul{margin-right:84px !important;list-style:none;display:flex;align-items:center;gap:32px;margin:0;padding:0;font-size:14px;line-height:var(--logo-h)} /* line-height = logo height keeps the row exactly logo-tall */
+.nav ul a{opacity:.92;transition:opacity .2s}
+.nav ul a:hover{opacity:1}
+.mode{position:fixed;z-index:40;top:calc(var(--nav-pad) - 3px + env(safe-area-inset-top,0px));right:max(24px,env(safe-area-inset-right,0px));
+  display:flex;border:1px solid color-mix(in srgb,var(--ink) 35%,transparent);border-radius:999px;padding:2px;color:var(--ink);
+  background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:background-color .4s,color .4s,border-color .4s}  /* floats with the page; frosted so it reads over photos and faces */
+.mode button{all:unset;cursor:pointer;display:grid;place-items:center;width:22px;height:18px;border-radius:999px;color:inherit;transition:background-color .3s,color .3s}
+.mode button[aria-pressed="true"]{background:currentColor}
+.mode button[aria-pressed="true"] svg{color:var(--paper)} /* icon knocks out of the filled pill */
+.mode button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.hero-body{margin-top:auto;padding-block:0 clamp(48px,7vw,84px);width:100%}
+.hero h1{font-weight:300;font-size:clamp(40px,5.4vw,72px);line-height:1.04;letter-spacing:-.03em;margin:0 0 40px;max-width:8.6em;text-wrap:balance;color:#2a2826}
+.cta{display:inline-flex;align-items:center;gap:18px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#2a2826}
+.arrow{width:28px;height:14px;flex:none;transition:transform .25s ease}
+.cta:hover .arrow,.more:hover .arrow,.face:hover .arrow{transform:translateX(5px)}
+
+
+/* ---------- hero variant B: live clock ----------
+   A huge RADIUS dial in an inset panel, cropped so only an arc shows; the red seconds hand ticks past in real time.
+   Panel is a size container, so the dial is sized off the panel's height (cqh) and its centre placed with --cx/--cy. */
+/* Night = the big dial on a near-black ground (Day = the sunlit photo with the wall clock) */
+.hero.is-clock{background:var(--night);--night:#121211}
+.hero.is-clock .nav{color:#f4f2ee}
+.nav,.hero-body{position:relative;z-index:2}
+.clock-panel{display:none;position:absolute;inset:0;overflow:hidden;background:var(--night,#121211);container-type:size;
+  --r:calc(100cqh - 84px);--cx:50cqw;--cy:100cqh} /* full-bleed semicircle: hub on the bottom edge, top of bezel just under the nav */
+.hero.is-clock .clock-panel{display:block}
+.hero.is-clock{min-height:clamp(600px,64vw,820px)}
+.hero.is-clock .hero-body{color:#f4f2ee;padding-left:max(24px,16vw)} /* type sits inside the dark dial, indented clear of the 10 o'clock index; the hands sweep behind it */
+.hero.is-clock .cta{color:#f4f2ee}
+.hero.is-clock h1{font-size:clamp(40px,4.6vw,64px);max-width:7.4em;color:#f4f2ee}
+.dial{position:absolute;width:calc(2 * var(--r));height:calc(2 * var(--r));left:calc(var(--cx) - var(--r));top:calc(var(--cy) - var(--r));display:block}
+.dial .hand{transition:transform .22s cubic-bezier(.3,1.6,.5,1)} /* small overshoot = mechanical tick */
+.dial .hand.no-anim{transition:none}
+@media (prefers-reduced-motion:reduce){.dial .hand{transition:none}}
+/* prototype switch for comparing heroes */
+
+
+/* ---------- working wall clock in the photo hero ----------
+   The photo's own dial is painted over by an SVG face with live hands. Its position mirrors background-size:cover
+   maths: scale s = max(W/1568, H/1003); the image is offset by (W - 1568s) * hx horizontally and centred vertically.
+   No clock in this photo: we hang our own on the sunlit wall at (1090, 375) in source px — the patch between the
+   leaf-shadow band and the yellow block's shadow, right of the headline. Face r = 72px (100 svg units); the svg box
+   is 320 units = 230.4px so the case (r 119 units) and its cast shadow fit. Light comes from the upper right, so shadows fall down-left. */
+.wall{position:absolute;inset:0;overflow:hidden;container-type:size;pointer-events:none;z-index:0}
+.hero.is-clock .wall{display:none}
+.wall-face{position:absolute;--s:max(calc(100cqw / 1568), calc(100cqh / 1003));
+  --wx:960;--wy:330;--wf:62;   /* clock centre + face radius in source px (plain wall between the leaf light and the door); phone overrides below */
+  width:calc(3.2 * var(--wf) * var(--s));height:calc(3.2 * var(--wf) * var(--s));
+  left:calc((100cqw - 1568 * var(--s)) * var(--hx) + (var(--wx) - 1.6 * var(--wf)) * var(--s));
+  top:calc((100cqh - 1003 * var(--s)) * .5 + (var(--wy) - 1.6 * var(--wf)) * var(--s))}
+.wall-face svg{display:block;width:100%;height:100%;
+  /* diffusion: match the photo's softness — a slight blur scaled to clock size, lifted blacks, lower contrast */
+  filter:blur(calc(var(--s) * 1.5px)) contrast(.93) saturate(.85) brightness(.97) sepia(.1); /* sepia = the photo's warm grade */}
+/* faint haze/grain over the dial so it isn't a flat vector */
+.wall-face::after{content:"";position:absolute;inset:18.75%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 30% 25%,rgba(255,244,228,.10),rgba(255,244,228,0) 60%);mix-blend-mode:screen}
+.wall-face .hand{transition:transform .22s cubic-bezier(.3,1.6,.5,1)}
+.wall-face .hand.no-anim{transition:none}
+@media (prefers-reduced-motion:reduce){.wall-face .hand{transition:none}}
+
+
+/* ---------- night mode ----------
+   html.night flips the tokens; the hero gets a night-graded photo, the devices get night templates
+   (studio background re-toned to the night ground), and the few literal colours are overridden here. */
+html.night{--paper:#141413;--ink:#ecebe6;--ink-soft:#a9a59f;--hair:#34322f;color-scheme:dark}
+/* night photo sits on its own layer over the day one and fades in, so the switch reads as dusk falling */
+.hero-night{position:absolute;inset:0;background:var(--hero-night) calc(var(--hx) * 100%) 50%/cover no-repeat;opacity:0;transition:opacity 1.4s ease;pointer-events:none;z-index:0}
+.hero{--hero-night:url(assets/hero-night.jpg)}
+html.night .hero-night{opacity:1}
+.wall-face,.wall-face svg{transition:filter 1.4s ease}
+html.night .hero h1,html.night .cta{color:#ecebe6}
+/* wall clock dial: black by day, white at night (colours as CSS so the mode can flip them) */
+.wall-face{--wrefl:.04;--wf0:#0d0c0c;--wf1:#0b0b0a;--wf2:#090909; /* nearly flat: a real matte dial barely shades */--wring:#2a2927;--wink:#e6e0d6;--wtick:#b3ada4;--wcast:.28;--wshade:0}
+html.night .wall-face{--wf0:#e9e7e2;--wf1:#d6d3cd;--wf2:#b9b5ae;--wring:#a9a59e;--wink:#1d1c1a;--wtick:#55524d;--wcast:.55;--wtint:#5b6378;--wtinto:.22;filter:brightness(.6);--wshade:.24;--wrefl:.05} /* white dial, but in the same low light as the wall: greyed, with a stronger falloff and soft shadow */
+.wall-face .wf0{stop-color:var(--wf0)}.wall-face .wf1{stop-color:var(--wf1)}.wall-face .wf2{stop-color:var(--wf2)}
+.wall-face .wring{fill:var(--wring)}.wall-face .wrefl{opacity:var(--wrefl)}.wall-face .wtint{fill:var(--wtint,#d9b48e);opacity:var(--wtinto,.16)}.wall-face .wcast{opacity:var(--wcast)}.wall-face .whs{flood-opacity:.4}
+.wall-face .wshade{fill:#0b0d14;opacity:var(--wshade)} /* cool night tint over the dial */.wall-face .wink{fill:var(--wink)}.wall-face .wtick{fill:var(--wtick)}
+/* night: the watch rows stay on the light paper (watches and faces read best there); the rest of the page goes dark */
+.band-light{background:var(--paper);padding-top:clamp(40px,5vw,64px);transition:background-color .4s ease}
+html.night .fm,html.night .band-light{--paper:#f2eeea;--ink:#1d1c1a;--ink-soft:#3a3835;--hair:#d7d2cd;--cw-mono:#1d1c1a;color:var(--ink)}
+.device .tpl{transition:filter .4s ease}
+
+
+html.night .studio img{filter:brightness(.42) contrast(1.08)}
+html.night .studio{color:#ecebe6}
+html.night .studio p{color:rgba(236,235,230,.78)}
+body,.fm,.alerts input{transition:background-color .4s ease,color .4s ease}
+
+/* ---------- intro ---------- */
+.rule{display:block;width:60px;height:1px;background:var(--ink);margin-bottom:22px}
+.intro{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding-block:clamp(48px,6vw,72px) clamp(40px,5vw,64px);align-items:start}
+.intro h2{font-weight:400;font-size:clamp(28px,3vw,36px);line-height:1.12;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.intro p{margin:22px 0 0;max-width:30ch;font-size:16px;color:var(--ink-soft)}
+
+/* ---------- faces grid ---------- */
+.faces{display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:clamp(56px,6vw,80px)}
+.face{display:flex;flex-direction:column;padding:0 22px;border-left:1px solid var(--hair);min-width:0}
+.face:nth-child(4n+1){border-left:0;padding-left:0}  /* first in each row of 4 */
+.face:nth-child(4n){padding-right:0}
+.faces{row-gap:56px}
+.name em{font-style:italic;font-weight:300;letter-spacing:0;text-transform:lowercase;margin-left:.35em}
+/* placeholder screen until face art arrives: name + code, sized off the screen width */
+.screen{container-type:inline-size}
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw;color:#8e8a84;text-transform:uppercase}
+.ph span{font-size:9cqw;letter-spacing:.24em;font-weight:500;margin-right:-.24em}
+.ph small{font-size:5.5cqw;letter-spacing:.18em;color:#5f5c58}
+/* ---------- device mockup ----------
+   .tpl  = blank Fenix 9 shot, normalised so every template has the glass centred at (300,370) of 600x760, R=190.
+   .screen = the active display (r = 0.87R), positioned in % of that canvas. Face art is any square image;
+   it is clipped to the circle here, so supplied faces just drop in. */
+.device{position:relative;width:100%;max-width:236px;aspect-ratio:600/760;transition:transform .4s ease}
+.device .tpl{position:absolute;inset:0;width:100%;height:100%;display:block;background:var(--tpl) 0 0/100% 100% no-repeat}
+.tpl[data-tpl="orange"]{--tpl:url(assets/watches/orange.webp)}
+.tpl[data-tpl="peach"]{--tpl:url(assets/watches/peach.webp)}
+.tpl[data-tpl="sand"]{--tpl:url(assets/watches/sand.webp)}
+.tpl[data-tpl="slate"]{--tpl:url(assets/watches/slate.webp)}
+.tpl[data-tpl="free-black"]{--tpl:url(assets/watches/free-black.webp)}
+.screen{position:absolute;left:22.5%;top:26.97%;width:55%; /* screen r=165 at (300,370) on the 600x760 template: left=(300-165)/600 */aspect-ratio:1;border-radius:50%;overflow:hidden;background:#060607}
+/* free watch: face 6.5% smaller (r 154 vs 165, same centre 300,370) for a thicker black border inside the bezel */
+.tpl[data-tpl="free-black"] + .screen{left:24.28%;top:28.38%;width:51.43%}
+.screen img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover} /* face crops are now fitted to the display circle, so no overscan */
+.screen::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.13),rgba(255,255,255,0) 48%); /* glass sheen */
+  box-shadow:inset 0 0 7px rgba(0,0,0,.7)}                                                    /* display edge falloff */
+.face:hover .device{transform:translateY(-6px)}
+.tier{scroll-margin-top:24px;display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);padding-bottom:22px}
+.meta{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px;gap:12px}
+.code{font-size:12px;letter-spacing:.14em;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.name{font-weight:500;font-size:19px;letter-spacing:.16em;margin-top:2px}
+.bar{display:block;height:3px;margin-top:14px;background:var(--c);transform-origin:left;transition:transform .35s ease}
+
+/* ---------- free faces rail ----------
+   8 smaller cards in a horizontal scroller with snap; overrides the 4-up grid's row rules */
+.rail{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:clamp(168px,19vw,212px);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--hair) transparent;padding-bottom:28px;margin-bottom:clamp(48px,6vw,72px)}
+.rail .face,.rail .face:nth-child(n){border-left:1px solid var(--hair);padding:0 18px;scroll-snap-align:start}
+.rail .face:first-child{border-left:0;padding-left:0}
+.rail .name{font-size:15px}
+.rail .device{width:calc(clamp(168px,19vw,212px) - 36px)} /* fixed: the first card has no left padding, so % widths would make it bigger */
+.rail-ctl{display:flex;align-items:center;gap:14px}
+.rail-ctl button{all:unset;cursor:pointer;display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--hair);border-radius:50%;color:var(--ink)}
+.rail-ctl button:hover{border-color:var(--ink)}
+.rail-ctl button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.rail-ctl button[disabled]{opacity:.3;cursor:default}
+.rail-ctl .arrow{width:16px;height:8px}
+#rail-prev .arrow{transform:scaleX(-1)}
+
+/* ---------- alerts sign-up ---------- */
+.alerts{padding-block:0 clamp(64px,8vw,104px)}
+.alerts-box{border:1px solid var(--ink);display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;padding:clamp(28px,4vw,48px)}
+.alerts h2{font-weight:400;font-size:clamp(26px,2.8vw,32px);letter-spacing:-.015em;margin:0 0 10px}
+.brand{font-weight:800;letter-spacing:-.02em;color:var(--ink)} /* brand name set bold, like the wordmark */
+.alerts p{margin:0;color:var(--ink-soft)} /* no measure cap: keeps the line on one row on desktop */
+.alerts form{display:flex;gap:0;min-width:0}
+.alerts input{flex:1;min-width:0;font:inherit;font-size:16px;padding:15px 16px;border:1px solid var(--ink);border-right:0;background:transparent;color:var(--ink);border-radius:0}
+.alerts input:focus{outline:2px solid var(--ink);outline-offset:-2px}
+.alerts button{font:inherit;font-size:15px;font-weight:500;padding:0 22px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:14px;border-radius:0}
+.alerts button[disabled]{opacity:.6;cursor:default}
+.alerts .msg{grid-column:2;font-size:14px;margin-top:-18px;min-height:1.5em;color:var(--ink-soft)}
+.alerts .msg.ok{color:var(--ink)}
+
+/* ---------- studio band ---------- */
+/* full-bleed photo band. Desktop: black type top-left on the bright sky so the whole tower stays in frame.
+   Phone (see media query): band goes portrait-ish, type drops to the dark street in white over a scrim. */
+.studio{position:relative;min-height:clamp(560px,62vw,860px);display:flex;align-items:flex-start;color:var(--ink);background:#d9d9d7;margin-bottom:clamp(64px,7vw,96px)}
+.studio img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 10%;display:block}
+.studio-txt{position:relative;z-index:1;width:100%;padding-block:clamp(48px,6vw,88px)}
+.studio .rule{background:currentColor}
+.studio h2{font-weight:400;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.02em;margin:0 0 16px;max-width:9em;text-wrap:balance}
+.studio p{margin:0 0 28px;max-width:30ch;font-size:16.5px;color:var(--ink-soft)}
+.more{display:inline-flex;align-items:center;gap:18px;font-size:16px}
+
+/* ---------- footer ---------- */
+/* olive band + colour stripe on the right edge = straight lift from the logo card */
+footer{position:relative;background:var(--olive);color:var(--bone)}
+/* mirror of the masthead: nav left, logo + stripe locked up on the right edge */
+footer::after{content:"";position:absolute;top:0;bottom:0;right:0;width:var(--stripe-w);background:linear-gradient(var(--cw-orange) 0 25%,var(--cw-cyan) 0 50%,var(--cw-pink) 0 75%,var(--cw-black) 0)} /* full footer height, so the cyan/pink join lands on the logo midline */
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;max-width:none;padding-block:52px;padding-left:calc(var(--stripe-w) + 14px + env(safe-area-inset-left,0px));padding-right:calc(var(--stripe-w) + 14px + env(safe-area-inset-right,0px))}
+footer .logo{margin-left:auto} /* stays right-aligned even when it wraps under the nav on phones */
+footer .wordmark{height:var(--logo-h)}
+footer nav a{opacity:.85}footer nav a:hover{opacity:1}
+footer nav{display:flex;align-items:center;gap:52px;font-size:14px}
+footer nav .icons{display:flex;gap:18px}
+footer svg{width:20px;height:20px;display:block}
+
+
+/* ---------- face detail popup ----------
+   Native <dialog>: gives us focus trapping, Esc-to-close and the top layer for free.
+   Desktop = centred two-column panel; phone (≤640) = full-screen sheet. */
+html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog */
+.fm{padding:0;border:0;background:var(--paper);color:var(--ink);width:min(980px,calc(100% - 48px));max-width:none;max-height:calc(100% - 48px);overflow:auto;box-shadow:0 30px 80px rgba(20,18,16,.35)}
+.fm::backdrop{background:rgba(29,28,26,.55);backdrop-filter:blur(4px)}
+.fm[open]{animation:fm-in .32s cubic-bezier(.2,.7,.2,1)}
+@keyframes fm-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.fm-in{display:grid;grid-template-columns:1.05fr 1fr;min-height:560px}
+.fm-art{background:var(--paper);border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:48px}
+.fm-vars{display:flex;gap:14px;justify-content:center}
+.fm-wake{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);border:1px solid var(--ink);border-radius:999px;padding:9px 16px;transition:background-color .2s,color .2s}
+.fm-wake:hover{background:var(--ink);color:var(--paper)}
+.fm-wake:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.fm-wake[hidden]{display:none}
+/* LUNAR wake plays Jim's real sleep-to-wake GIF once (faces2/lunar-wake.gif), then returns to the static face */
+.fm-vars[hidden]{display:none}
+.fm-vars button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding-bottom:6px;border-bottom:2px solid transparent}
+.fm-vars button img{width:46px;aspect-ratio:1;border-radius:50%;object-fit:cover;display:block}
+.fm-vars button[aria-pressed="true"]{color:var(--ink);border-color:var(--c)}
+.fm-vars button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.fm h2 em{font-style:italic;font-weight:300;letter-spacing:0;text-transform:lowercase;margin-left:.3em}
+.fm-art .device{width:min(100%,380px);max-width:none}
+.fm-body{padding:56px 52px 40px;display:flex;flex-direction:column;min-width:0}
+.fm-code{font-size:12px;letter-spacing:.16em;color:var(--ink-soft)}
+.fm h2{font-weight:500;font-size:clamp(30px,3.4vw,42px);letter-spacing:.16em;margin:8px 0 0;line-height:1.1}
+.fm-bar{display:block;width:64px;height:3px;background:var(--c);margin:22px 0 26px}
+.fm-desc{margin:0 0 30px;font-size:17px;line-height:1.55;color:var(--ink-soft);max-width:36ch}
+.fm-chips{list-style:none;margin:0 0 36px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.fm-chips li{border:1px solid #cfc9c2;padding:8px 12px;font-size:13px;line-height:1.2;font-variant-numeric:tabular-nums}
+.fm-chips.is-soon li{border-style:dashed;color:var(--ink-soft)}
+.fm-get.is-soon{cursor:default}
+.fm-get.is-soon .ciq{opacity:.35;filter:grayscale(1)} /* not live yet: badge greyed, note says so */
+.fm-get{align-self:flex-start;display:inline-flex;flex-direction:column;align-items:flex-start;gap:8px;border-radius:9px;
+}
+.fm-get .ciq{height:52px;width:auto;display:block;border-radius:9px;transition:transform .2s ease,box-shadow .2s ease}
+.fm-get .ciq-w{display:none}
+
+.fm-get:not(.is-soon):hover .ciq{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.22)}
+.fm-get:not(.is-soon):active .ciq{transform:translateY(0);box-shadow:0 2px 6px rgba(0,0,0,.22)}
+.fm-get:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.fm-get-note{font-size:12px;letter-spacing:.06em;color:var(--ink-soft)}
+.fm-get-note:empty{display:none}
+.fm-nav{margin-top:auto;padding-top:40px;display:flex;justify-content:space-between;gap:16px}
+.fm-nav button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:12px;font-size:12.5px;letter-spacing:.16em;color:var(--ink-soft);padding:6px 0}
+.fm-nav button:hover{color:var(--ink)}
+.fm-nav button:focus-visible,.fm-x:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.fm-nav .back .arrow{transform:scaleX(-1)}
+.fm-nav .back:hover .arrow{transform:scaleX(-1) translateX(5px)}
+.fm-x{all:unset;cursor:pointer;position:absolute;top:18px;right:18px;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:rgba(242,238,234,.9);z-index:2}
+.fm-x svg{width:18px;height:18px}
+@media (max-width:640px){
+  /* full-screen sheet; safe-area insets because the dialog sits outside the :root padding */
+  .fm{width:100%;height:100%;max-height:none;margin:0;inset:0;box-shadow:none}
+  .fm[open]{animation:fm-up .34s cubic-bezier(.2,.7,.2,1)}
+  @keyframes fm-up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+  .fm-in{grid-template-columns:1fr;min-height:100%}
+  .fm-art{padding:calc(56px + env(safe-area-inset-top,0px)) 24px 24px}
+  .fm-art .device{width:min(84%,340px)}
+  .fm-body{padding:32px max(24px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
+  .fm-get{align-self:flex-start}
+  .fm-x{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px))}
+}
+@media (prefers-reduced-motion:reduce){.fm[open]{animation:none}}
+
+@media (max-width:860px){
+  .nav ul{gap:24px}
+  .faces{grid-template-columns:repeat(2,1fr);row-gap:44px}
+  /* undo the 4-up row rules, then apply them per row of 2 */
+  .face,.face:nth-child(4n+1),.face:nth-child(4n){border-left:1px solid var(--hair);padding-left:22px;padding-right:22px}
+  .face:nth-child(2n+1){border-left:0;padding-left:0}
+  .face:nth-child(2n){padding-right:0}
+  .intro,.studio,.alerts-box{grid-template-columns:1fr}
+  .rail{grid-template-columns:none} /* the 2-up .faces rule above would otherwise squeeze the rail into 2 columns */
+  .studio{align-items:flex-end;color:#f4f2ee;min-height:620px}
+  .studio img{object-position:50% 40%}
+  .studio::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.8),rgba(10,10,10,.35) 40%,rgba(10,10,10,0) 62%)}
+  .studio p{color:rgba(244,242,238,.82)}
+  .alerts .msg{grid-column:1}
+  .intro p{margin-top:0}
+  footer nav{gap:28px}
+}
+@media (max-width:520px){
+  :root{--logo-h:14px;--nav-pad:18px}
+  /* phone: logo row goes on top so the stripe can stay centred on it; stripe is cut to that row's height */
+  footer .logo{order:-1;width:100%;justify-content:flex-end}
+  footer::after{bottom:auto;height:calc(104px + var(--logo-h))}
+  .nav ul{display:none} /* phone: menu lives in the footer; the floating day/night toggle takes this slot */
+  .hero h1{max-width:7em;font-size:38px} /* longer line: smaller on phone so it stays at 4 lines */
+  /* clock on phone: quarter dial in a panel above the text, centre at the panel's bottom-right (ref mock) */
+  .hero.is-clock{min-height:700px}
+  .clock-panel{top:72px;left:0;bottom:250px;--r:100cqh;--cx:100cqw;--cy:100cqh}
+  .hero.is-clock .hero-body,.hero.is-clock h1,.hero.is-clock .cta{color:#f4f2ee} /* phone: type on the night ground below the quarter dial */
+  .hero.is-clock .hero-body{padding-left:max(24px,env(safe-area-inset-left,0px))}
+  .hero.is-clock h1{font-size:40px;max-width:8em}
+  .face,.face:nth-child(4n+1),.face:nth-child(4n){padding-left:12px;padding-right:12px}
+  .face:nth-child(2n+1){padding-left:0}
+  .face:nth-child(2n){padding-right:0}
+  .name{font-size:15px;letter-spacing:.12em}
+  /* phone: the shoe pile lands under the headline, so a soft wall-coloured wash sits behind the text block */
+  .hero{background-image:radial-gradient(120% 60% at 10% 62%,rgba(214,200,186,.86),rgba(214,200,186,.6) 45%,rgba(214,200,186,0) 80%),var(--hero-img);background-position:0 0,calc(var(--hx) * 100%) 50%;background-size:auto,cover;--hx:.82}
+  .wall-face{--wx:1020;--wy:255;--wf:50} /* phone crop: on the wall left of the door, between the nav and the headline */
+  .hero-night{background-image:radial-gradient(120% 60% at 10% 62%,rgba(24,24,28,.85),rgba(24,24,28,.6) 45%,rgba(24,24,28,0) 80%),var(--hero-night);background-position:0 0,calc(var(--hx) * 100%) 50%;background-size:auto,cover}
+  .hero.is-clock{background:var(--night)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="mode" id="mode" role="group" aria-label="Day or night"><button type="button" data-mode="day" aria-pressed="true" aria-label="Day mode" title="Day"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><button type="button" data-mode="night" aria-pressed="false" aria-label="Night mode" title="Night"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg></button></div>
+<header class="hero" id="hero">
+  <div class="hero-night" aria-hidden="true"></div>
+  <div class="wall" aria-hidden="true"><div class="wall-face">
+    <svg viewBox="-160 -160 320 320">
+      <!-- Simple wall clock lit like the photo: light from the upper left, so the case is brighter top-left
+           and a short soft shadow falls down-right. Dial colours come from CSS (.wf*, .wink, .wtick) for day/night. -->
+      <defs>
+        <filter id="wcast" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+        <linearGradient id="wcase" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aeaaa3"/><stop offset=".55" stop-color="#a09c95"/><stop offset="1" stop-color="#8d8983"/></linearGradient>
+        <radialGradient id="wface" cx=".38" cy=".34" r=".85"><stop offset="0" class="wf0"/><stop offset=".6" class="wf1"/><stop offset="1" class="wf2"/></radialGradient>
+        <radialGradient id="wrim" cx=".54" cy=".55" r=".5"><stop offset=".9" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></radialGradient>
+        <filter id="wsh" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="1.2" dy="1.6" stdDeviation=".8" class="whs"/></filter>
+        <clipPath id="wdial"><circle r="100"/></clipPath>
+        <clipPath id="wbody"><circle r="106"/></clipPath>
+        <filter id="wnoise" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feColorMatrix type="saturate" values="0"/></filter>
+        <filter id="wtight" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>
+        <filter id="wsoft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>
+        <filter id="wbloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="b"/><feComponentTransfer in="b" result="bf"><feFuncA type="linear" slope=".15"/></feComponentTransfer><feMerge><feMergeNode in="bf"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="wsoft6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+      </defs>
+      <circle cx="3" cy="5" r="106" fill="#2a1f14" class="wcast" filter="url(#wcast)" style="mix-blend-mode:multiply"/>
+      <!-- tight contact shadow where the case meets the wall, under the wide soft one -->
+      <circle cx="1.5" cy="2" r="106" fill="#1a130c" class="wcast" filter="url(#wtight)" style="mix-blend-mode:multiply"/>
+      <circle r="106" fill="url(#wcase)"/>
+      <!-- bezel light: a soft specular arc where the window light catches it, a darker turned edge opposite -->
+      <path d="M-101.5 -19 A103.5 103.5 0 0 1 19 -101.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".35" filter="url(#wsoft)"/>
+      <path d="M-77 -69 A103.5 103.5 0 0 1 -44 -93.5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".3" filter="url(#wtight)"/>
+      <path d="M101.5 19 A103.5 103.5 0 0 1 -19 101.5" fill="none" stroke="#1d1a16" stroke-width="4" opacity=".18" filter="url(#wsoft)"/>
+      <circle r="101" class="wring"/>
+      <g clip-path="url(#wdial)">
+        <circle r="100" fill="url(#wface)"/>
+        <g filter="url(#wbloom)"><g id="wticks"></g></g>
+        <g filter="url(#wsh)"><g filter="url(#wbloom)">
+          <g class="hand" id="w-hr"><rect x="-3.15" y="-57.5" width="6.3" height="65" rx="3.15" class="wink"/></g>
+          <g class="hand" id="w-min"><rect x="-2.3" y="-88" width="4.6" height="95" rx="2.3" class="wink"/></g>
+          <g class="hand" id="w-sec"><rect x="-1.2" y="-64.5" width="2.4" height="85.5" fill="#e1251b"/><circle cy="-70.5" r="6" fill="none" stroke="#e1251b" stroke-width="2.4"/><rect x="-1.2" y="-94" width="2.4" height="17.5" fill="#e1251b"/></g>
+          <circle r="6.3" class="wink"/>
+        </g></g>
+        <circle r="3.4" fill="#e1251b"/>
+        <circle r="100" fill="url(#wrim)"/>
+        <!-- the bezel lip shades the upper-left of the recessed dial -->
+        <circle cx="5" cy="6" r="100" fill="none" stroke="#000" stroke-width="12" opacity=".22" filter="url(#wsoft6)" transform="translate(-10 -12)"/>
+        <!-- faint reflection of the window in the glass: a soft, off-centre band -->
+        <ellipse cx="-30" cy="-46" rx="88" ry="34" transform="rotate(-28)" fill="#fff" class="wrefl" filter="url(#wsoft6)"/> <!-- glass picks up the window: reads clearly on black, barely on white -->
+        <circle r="100" class="wshade"/>
+      </g>
+      <!-- integration: wall-coloured ambient light over the whole clock, then photo-like grain -->
+      <g clip-path="url(#wbody)">
+        <circle r="106" class="wtint" style="mix-blend-mode:soft-light"/>
+        <rect x="-106" y="-106" width="212" height="212" filter="url(#wnoise)" opacity=".16" style="mix-blend-mode:overlay"/>
+      </g>
+    </svg>
+  </div></div>
+  <div class="clock-panel" aria-hidden="true">
+    <svg class="dial" viewBox="-500 -500 1000 1000">
+      <defs>
+        <linearGradient id="bezel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f4f2"/><stop offset=".45" stop-color="#9c9b98"/><stop offset=".7" stop-color="#d9d8d5"/><stop offset="1" stop-color="#6e6d6a"/></linearGradient>
+        <radialGradient id="face" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#1b1b1b"/><stop offset="1" stop-color="#050505"/></radialGradient>
+        <filter id="hs" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-opacity=".55"/></filter>
+      </defs>
+      <circle r="500" fill="url(#bezel)"/>
+      <circle r="486" fill="#2b2b2a"/>
+      <circle r="478" fill="url(#face)"/>
+      <g id="ticks"></g>
+      <g filter="url(#hs)">
+        <g class="hand" id="h-hr"><rect x="-15" y="-275" width="30" height="310" rx="15" fill="#f4f2ee"/></g>
+        <g class="hand" id="h-min"><rect x="-11" y="-420" width="22" height="455" rx="11" fill="#f4f2ee"/></g>
+        <g class="hand" id="h-sec"><!-- same design as the wall clock, ×4.76 --><rect x="-5.7" y="-307" width="11.4" height="407" fill="#e1251b"/><circle cy="-336" r="28.5" fill="none" stroke="#e1251b" stroke-width="11.4"/><rect x="-5.7" y="-450" width="11.4" height="85" fill="#e1251b"/></g>
+      </g>
+      <circle r="30" fill="#f4f2ee"/><circle r="16" fill="#e1251b"/>
+    </svg>
+  </div>
+  <div class="wrap nav">
+    <a class="logo" href="#" aria-label="colorwerk home"><svg class="wordmark" viewBox="0 0 812 134" role="img" aria-label="colorwerk"><path fill="currentColor" fill-rule="evenodd" d="M51.12 128.24C50.44 128.13 49.02 128.03 47.98 128.02C45.49 127.99 39.51 126.76 36.45 125.65C30.75 123.58 25.93 120.60 21.95 116.69C18.53 113.35 16.41 110.43 14.25 106.12C11.61 100.85 10.35 96.50 9.51 89.74C8.74 83.47 9.54 75.16 11.63 67.88C13.72 60.57 17.38 54.51 22.90 49.21C28.67 43.66 37.59 39.54 45.62 38.73C52.33 38.05 52.85 38.03 55.75 38.39C57.33 38.59 59.15 38.75 59.79 38.75C60.96 38.75 61.75 38.89 65.75 39.77C72.44 41.26 79.78 45.19 84.18 49.66C88.81 54.35 91.68 59.99 92.87 66.75C93.36 69.53 93.34 69.91 92.75 70.50C92.27 70.98 91.92 71.00 81.40 71.00C68.88 71.00 69.85 71.21 69.11 68.38C68.35 65.42 66.74 62.53 64.89 60.80C63.03 59.06 60.31 57.61 57.96 57.11C55.78 56.64 50.00 56.65 48.18 57.12C45.93 57.71 43.79 58.92 41.72 60.78C36.29 65.67 33.49 73.44 33.50 83.66C33.51 95.54 37.39 104.24 44.50 108.31C46.52 109.47 49.05 110.00 52.53 110.00C57.92 110.00 61.54 108.70 64.65 105.63C67.40 102.91 68.98 99.80 70.26 94.55C70.46 93.76 70.69 93.41 71.15 93.24C71.52 93.10 76.24 93.00 82.37 93.00C91.83 93.00 93.01 93.04 93.37 93.41C93.60 93.63 93.72 93.96 93.65 94.14C93.59 94.32 93.34 95.57 93.12 96.92C92.89 98.27 92.26 100.76 91.71 102.45C87.98 113.99 80.03 122.00 68.50 125.86C66.64 126.48 64.37 127.09 63.44 127.22C62.52 127.35 61.64 127.54 61.48 127.64C61.32 127.73 59.39 127.91 57.19 128.03C54.98 128.14 53.00 128.28 52.78 128.33C52.56 128.38 51.81 128.34 51.12 128.24ZM134.38 128.01C132.72 127.91 130.87 127.71 130.25 127.56C129.63 127.41 128.39 127.15 127.50 126.98C122.97 126.12 115.88 122.95 112.03 120.06C101.27 111.98 95.38 99.04 95.38 83.50C95.38 72.27 98.53 61.85 104.27 54.20C106.85 50.75 111.41 46.71 115.32 44.40C119.53 41.92 125.78 39.65 130.12 39.02C138.03 37.87 141.17 37.88 149.25 39.03C150.28 39.18 152.55 39.73 154.30 40.26C164.73 43.39 172.41 49.26 177.69 58.12C180.01 62.04 182.08 67.55 182.83 71.88C183.04 73.11 183.36 74.97 183.55 76.00C183.98 78.48 183.99 88.22 183.55 90.75C182.62 96.21 182.36 97.37 181.45 100.12C177.85 110.99 170.91 119.06 161.12 123.74C158.42 125.03 154.03 126.54 151.62 127.01C150.80 127.17 149.39 127.45 148.50 127.63C146.49 128.03 138.41 128.25 134.38 128.01ZM260.75 128.01C259.03 127.91 257.12 127.71 256.50 127.56C255.88 127.41 254.70 127.16 253.88 127.00C251.62 126.56 246.70 124.86 244.41 123.72C240.78 121.91 236.82 119.08 234.12 116.37C225.90 108.10 221.75 97.03 221.75 83.38C221.75 77.75 222.24 74.05 223.67 68.75C225.67 61.38 228.86 55.71 233.88 50.60C236.83 47.60 239.58 45.52 243.07 43.65C248.71 40.63 253.05 39.36 260.75 38.47C270.58 37.33 282.19 39.59 289.87 44.13C293.61 46.34 295.50 47.80 298.32 50.67C304.58 57.04 308.20 64.84 309.87 75.56C310.39 78.88 310.39 87.89 309.87 91.19C308.59 99.37 306.57 104.88 302.78 110.54C300.10 114.55 295.75 118.91 292.14 121.20C289.87 122.64 285.45 124.73 282.62 125.70C276.71 127.72 269.35 128.50 260.75 128.01ZM532.38 128.00C521.15 127.30 510.69 122.22 503.95 114.20C498.56 107.79 495.74 100.98 494.01 90.22C493.67 88.08 493.67 79.29 494.02 76.94C495.82 64.65 500.69 55.21 508.72 48.44C513.09 44.76 517.77 42.13 523.01 40.42C527.00 39.11 532.66 38.20 537.10 38.16C539.67 38.13 545.02 38.71 547.62 39.30C561.00 42.31 571.23 51.85 576.12 65.88C576.81 67.84 577.97 72.41 578.23 74.19C578.38 75.18 578.62 76.79 578.78 77.76C578.93 78.73 579.07 81.49 579.09 83.88C579.12 88.10 579.11 88.25 578.56 88.80L577.99 89.38L548.12 89.44L518.26 89.51L518.10 90.15C518.01 90.50 518.06 91.76 518.21 92.96C519.36 102.10 523.78 107.43 531.80 109.36C535.62 110.28 540.52 110.28 543.97 109.35C549.05 107.99 553.70 104.54 555.66 100.68C556.03 99.96 556.52 99.39 556.90 99.24C557.58 98.98 575.49 98.90 576.43 99.16C577.26 99.38 577.34 100.09 576.74 101.94C576.01 104.18 573.32 109.67 571.80 112.00C570.19 114.47 567.11 117.96 565.02 119.66C560.93 123.00 553.81 126.20 548.40 127.12C547.17 127.33 545.76 127.60 545.27 127.73C543.99 128.05 535.92 128.22 532.38 128.00ZM191.14 125.61C190.79 125.25 190.75 119.60 190.75 67.11C190.75 9.33 190.75 9.00 191.25 8.50C191.74 8.01 192.08 8.00 202.88 8.00C213.67 8.00 214.01 8.01 214.50 8.50C215.00 9.00 215.00 9.33 215.00 67.09C215.00 123.04 214.98 125.19 214.54 125.59C214.13 125.96 212.95 126.00 202.81 126.00C192.89 126.00 191.49 125.95 191.14 125.61ZM316.89 125.61C316.54 125.25 316.50 121.08 316.50 83.40C316.50 47.69 316.55 41.52 316.85 41.11C317.20 40.64 317.61 40.62 327.83 40.62C337.89 40.62 338.47 40.65 338.97 41.10C339.47 41.55 339.49 41.85 339.56 47.58C339.60 51.78 339.71 53.61 339.91 53.68C340.06 53.73 340.84 52.84 341.63 51.70C345.46 46.19 349.65 42.81 355.65 40.38C358.21 39.35 360.01 38.91 363.88 38.39C366.42 38.05 366.80 38.06 368.99 38.48C370.98 38.87 371.44 39.05 371.97 39.66L372.58 40.38L380.73 40.51C385.21 40.58 389.07 40.73 389.31 40.85C389.72 41.04 390.72 43.76 391.11 45.75C391.21 46.23 391.44 47.13 391.62 47.75C391.80 48.37 392.25 50.00 392.61 51.38C392.97 52.75 393.44 54.44 393.64 55.12C393.85 55.81 394.42 57.89 394.91 59.75C396.62 66.21 397.21 68.41 398.69 73.88C399.52 76.90 400.25 79.60 400.32 79.88C400.39 80.15 400.98 82.29 401.63 84.62C402.27 86.96 403.12 90.14 403.51 91.68C403.90 93.22 404.35 94.72 404.50 95.00C404.87 95.68 405.53 95.55 405.76 94.75C406.26 93.00 406.84 90.73 407.76 86.88C408.32 84.54 409.61 79.25 410.62 75.12C413.24 64.54 415.51 55.24 416.98 49.12C418.57 42.53 418.91 41.39 419.42 40.96C419.75 40.69 421.92 40.62 430.78 40.62C441.41 40.62 441.75 40.64 442.22 41.12C442.69 41.62 442.94 42.46 444.62 49.25C445.08 51.11 445.75 53.75 446.11 55.12C446.47 56.50 446.92 58.30 447.11 59.12C447.30 59.95 449.43 68.47 451.85 78.06C454.27 87.65 456.25 95.56 456.25 95.63C456.25 95.69 456.41 95.75 456.62 95.75C457.10 95.75 457.29 95.33 458.07 92.50C458.43 91.19 459.09 88.83 459.53 87.25C459.97 85.67 460.52 83.59 460.76 82.62C461.00 81.66 461.72 78.96 462.37 76.62C463.01 74.29 463.98 70.74 464.51 68.75C465.05 66.76 465.88 63.66 466.37 61.88C466.86 60.09 467.59 57.39 468.00 55.88C468.41 54.36 469.13 51.72 469.60 50.00C470.07 48.28 470.75 45.75 471.12 44.38C472.03 40.96 472.14 40.83 474.05 40.63C474.92 40.54 480.14 40.50 485.65 40.55C496.14 40.63 496.50 40.67 496.50 41.72C496.50 41.94 496.15 43.25 495.72 44.62C494.71 47.87 492.35 55.38 490.46 61.38C489.63 63.99 488.73 66.86 488.45 67.75C488.17 68.64 487.52 70.72 486.99 72.38C485.51 77.01 484.40 80.53 483.13 84.62C482.49 86.69 481.76 88.99 481.50 89.75C481.25 90.51 480.52 92.81 479.87 94.88C478.68 98.68 478.21 100.19 476.12 106.88C475.47 108.94 474.68 111.41 474.36 112.38C474.05 113.34 473.37 115.47 472.87 117.12C470.78 124.00 470.26 125.41 469.65 125.81C469.50 125.91 464.08 125.99 457.60 126.00C446.70 126.00 445.80 125.97 445.45 125.56C445.24 125.32 444.77 123.94 444.40 122.50C443.70 119.74 442.82 116.39 442.13 113.88C441.91 113.05 441.40 111.14 441.00 109.62C440.60 108.11 439.87 105.36 439.38 103.50C438.89 101.64 438.05 98.44 437.50 96.38C436.56 92.79 435.62 89.26 433.96 83.00C433.54 81.42 432.82 78.66 432.36 76.88C431.50 73.55 430.83 71.75 430.47 71.75C430.09 71.75 429.51 73.20 429.00 75.42C428.72 76.63 428.22 78.64 427.89 79.88C427.56 81.11 427.12 82.80 426.92 83.62C426.30 86.14 420.86 107.59 419.62 112.38C418.98 114.85 418.25 117.72 418.01 118.75C416.88 123.49 416.38 125.12 415.96 125.54C415.53 125.97 414.81 126.00 403.66 126.00C392.71 126.00 391.80 125.97 391.44 125.56C391.06 125.14 389.11 119.39 387.39 113.62C386.67 111.22 383.74 102.03 381.14 94.00C380.67 92.56 379.76 89.69 379.13 87.62C378.49 85.56 377.76 83.26 377.50 82.50C377.24 81.74 376.45 79.27 375.74 77.00C372.46 66.54 370.94 61.98 370.63 61.66C370.26 61.30 367.80 60.87 364.60 60.61C362.08 60.42 357.33 61.04 354.93 61.89C347.22 64.62 342.74 70.62 341.24 80.22C340.78 83.11 340.75 84.77 340.75 104.25C340.75 124.20 340.73 125.19 340.29 125.59C339.88 125.96 338.70 126.00 328.56 126.00C318.64 126.00 317.24 125.95 316.89 125.61ZM584.16 125.54C583.78 125.12 583.75 121.83 583.75 83.31C583.75 46.52 583.79 41.49 584.12 41.16C584.73 40.55 586.62 40.46 596.52 40.54C604.03 40.61 606.01 40.69 606.34 40.97C606.69 41.26 606.75 41.97 606.77 46.09C606.80 51.29 606.97 53.28 607.41 53.43C607.56 53.48 608.34 52.59 609.14 51.45C611.73 47.75 615.33 44.39 618.95 42.31C621.29 40.97 625.19 39.41 627.12 39.04C630.24 38.46 632.40 38.19 633.86 38.20C635.72 38.21 638.44 38.83 638.98 39.37C639.33 39.72 639.38 41.00 639.38 50.15C639.38 60.25 639.36 60.55 638.88 60.91C638.52 61.18 638.02 61.25 637.12 61.15C630.84 60.46 630.02 60.44 626.93 60.87C621.54 61.64 617.88 63.40 614.59 66.81C611.63 69.88 609.76 73.73 608.86 78.64C608.63 79.87 608.35 81.38 608.24 82.00C608.12 82.62 608.02 92.60 608.01 104.17C608.00 122.95 607.96 125.26 607.61 125.61C607.26 125.95 605.85 126.00 595.90 126.00C585.25 126.00 584.55 125.97 584.16 125.54ZM642.13 125.42C641.79 124.90 641.75 118.53 641.81 66.77C641.87 9.62 641.88 8.70 642.36 8.35C642.76 8.06 644.75 8.00 653.88 8.00C664.26 8.00 664.95 8.03 665.34 8.46C665.72 8.88 665.75 11.32 665.75 38.44C665.75 57.02 665.84 68.21 665.99 68.61C666.13 68.96 666.39 69.25 666.57 69.25C666.76 69.25 667.86 68.27 669.02 67.06C670.18 65.86 676.29 59.51 682.59 52.96C688.89 46.40 694.23 40.94 694.46 40.83C695.02 40.56 719.60 40.42 720.87 40.69C722.39 41.00 722.29 41.52 720.33 43.44C719.39 44.37 713.56 50.06 707.37 56.10C690.61 72.45 691.17 71.87 691.39 72.54C691.56 73.07 694.87 78.09 717.47 112.12C723.55 121.28 725.61 124.56 725.62 125.12L725.62 125.88L712.00 125.94C704.51 125.98 698.14 125.96 697.85 125.89C697.53 125.81 696.81 124.97 696.08 123.82C694.70 121.66 686.98 109.12 680.51 98.50C674.99 89.46 674.94 89.38 674.20 89.38C673.69 89.38 672.71 90.15 669.98 92.74C667.98 94.64 666.28 96.46 666.09 96.92C665.82 97.57 665.75 100.47 665.75 111.61C665.75 125.07 665.74 125.49 665.27 125.74C664.95 125.91 660.85 126.00 653.65 126.00L642.51 126.00L642.13 125.42ZM765.48 118.40C765.42 118.34 764.50 118.17 763.42 118.02C758.04 117.27 751.52 114.27 746.82 110.38C740.63 105.25 736.11 98.08 734.35 90.62C733.66 87.72 733.66 78.29 734.35 75.38C736.10 67.93 740.97 60.24 747.00 55.39C751.23 51.99 755.61 49.91 761.38 48.54C763.82 47.97 764.65 47.89 768.88 47.88C774.18 47.87 776.92 48.30 781.00 49.79C787.57 52.18 794.58 57.66 798.39 63.39C801.77 68.46 803.43 73.19 804.11 79.66C805.11 89.25 801.88 99.28 795.48 106.42C791.40 110.98 784.76 115.30 779.45 116.85C778.31 117.19 777.21 117.52 777.00 117.60C775.44 118.18 765.93 118.84 765.48 118.40ZM145.07 109.47C148.50 108.59 151.14 106.94 153.73 104.07C155.38 102.24 157.47 98.42 158.15 96.00C159.15 92.42 160.00 86.67 160.00 83.49C160.00 81.36 159.25 74.98 158.78 73.12C157.24 66.97 154.84 63.03 150.81 60.04C147.35 57.48 144.96 56.77 139.70 56.76C135.58 56.75 134.15 56.98 131.77 58.05C126.86 60.24 123.00 64.97 121.11 71.12C119.63 75.92 119.18 84.03 120.02 90.62C120.61 95.22 122.81 100.79 125.14 103.61C126.40 105.13 128.93 107.25 130.54 108.12C131.66 108.73 132.46 109.01 135.12 109.74C135.54 109.86 137.48 109.96 139.44 109.97C142.33 110.00 143.41 109.90 145.07 109.47ZM271.39 109.49C278.20 107.74 283.05 102.22 284.97 94.00C287.72 82.30 285.84 69.44 280.44 63.06C278.05 60.22 274.39 57.88 271.19 57.13C269.04 56.62 262.61 56.62 260.66 57.13C254.75 58.66 249.88 63.70 247.63 70.58C246.49 74.08 246.18 76.52 246.07 82.71C245.97 88.24 246.00 88.73 246.63 91.92C247.40 95.87 247.83 97.18 249.21 99.95C250.53 102.60 252.36 104.86 254.45 106.43C256.98 108.33 257.35 108.53 259.83 109.28C261.87 109.90 262.52 109.97 265.77 109.99C268.65 110.00 269.82 109.89 271.39 109.49ZM554.37 73.60C554.59 73.38 554.71 73.01 554.64 72.79C554.57 72.56 554.23 71.36 553.88 70.12C552.72 66.06 550.34 61.96 548.05 60.10C546.28 58.65 543.54 57.38 541.38 57.00C540.26 56.80 538.18 56.73 535.62 56.80C531.86 56.91 531.50 56.96 529.52 57.72C525.68 59.18 522.49 61.80 520.52 65.11C519.47 66.87 518.33 70.15 518.11 72.03C517.96 73.25 518.01 73.48 518.41 73.71C518.73 73.90 524.28 73.99 536.42 73.99C552.20 74.00 554.00 73.96 554.37 73.60Z"/></svg></a>
+    <ul>
+      <li><a href="#faces">Faces</a></li>
+      <li><a href="#studio">Studio</a></li>
+    </ul>
+  </div>
+  <div class="wrap hero-body">
+    <h1>Watchfaces designed for Garmins.</h1>
+    <a class="cta" href="#faces"><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 7h26M20 1l6 6-6 6"/></svg>See the collection</a>
+  </div>
+</header>
+
+<main>
+  <section class="wrap intro" id="faces">
+    <div><span class="rule"></span><h2>For people who like<br>good design.</h2></div>
+    <p>Watch faces for Garmin, designed with clarity, purpose and restraint.</p>
+  </section>
+
+  <div class="band-light">
+  <div class="wrap tier" id="pro"><span>Pro faces</span><span>4 faces</span></div>
+  <section class="wrap faces" aria-label="Pro watch faces">
+    <a class="face" href="#folio-pro" style="--c:var(--cw-orange)"><div class="device"><span class="tpl" data-tpl="sand"></span><div class="screen"><img src="assets/faces/folio-pro.jpg" alt="FOLIO PRO watch face"></div></div><div class="meta"><div><div class="code">CW·07</div><div class="name">FOLIO<em>pro</em></div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#versal-pro" style="--c:var(--cw-pink)"><div class="device"><span class="tpl" data-tpl="peach"></span><div class="screen"><img src="assets/faces/versal-pro.jpg" data-night="assets/faces/versal-pro-light.jpg" alt="VERSAL PRO watch face"></div></div><div class="meta"><div><div class="code">CW·08</div><div class="name">VERSAL<em>pro</em></div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#fahrplan-pro" style="--c:var(--cw-mono)"><div class="device"><span class="tpl" data-tpl="orange"></span><div class="screen"><img src="assets/faces/fahrplan-pro.jpg" data-night="assets/faces/fahrplan-pro-light.jpg" alt="FAHRPLAN PRO watch face"></div></div><div class="meta"><div><div class="code">CW·10</div><div class="name">FAHRPLAN<em>pro</em></div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#raster-pro" style="--c:var(--cw-cyan)"><div class="device"><span class="tpl" data-tpl="slate"></span><div class="screen"><img src="assets/faces/raster-pro.jpg" data-night="assets/faces/raster-pro-light.jpg" alt="RASTER PRO watch face"></div></div><div class="meta"><div><div class="code">CW·12</div><div class="name">RASTER<em>pro</em></div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+  </section>
+  </div>
+
+  <section class="studio" id="studio">
+    <img src="assets/kreuzberg.jpg" alt="The Fernsehturm seen from Rosa-Luxemburg-Platz, between Kino Babylon and the Volksbühne blocks, in black and white">
+    <div class="wrap studio-txt">
+      <span class="rule"></span>
+      <h2>Designed in Kreuzberg, Berlin.</h2>
+    </div>
+  </section>
+
+  <div class="band-light">
+  <div class="wrap tier" id="free"><span>Free faces</span><span class="rail-ctl">8 faces<button type="button" id="rail-prev" aria-label="Scroll free faces back"><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></button><button type="button" id="rail-next" aria-label="Scroll free faces forward"><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></button></span></div>
+  <section class="wrap faces rail" id="rail" aria-label="Free watch faces">
+    <a class="face" href="#funkhaus" style="--c:var(--cw-orange)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/funkhaus.jpg" data-night="assets/faces/funkhaus-light.jpg" alt="FUNKHAUS watch face"></div></div><div class="meta"><div><div class="code">CW·01</div><div class="name">FUNKHAUS</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#raster" style="--c:var(--cw-cyan)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/raster.jpg" data-night="assets/faces/raster-light.jpg" alt="RASTER watch face"></div></div><div class="meta"><div><div class="code">CW·02</div><div class="name">RASTER</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#radius" style="--c:var(--cw-mono)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/radius.jpg" data-night="assets/faces/radius-light.jpg" alt="RADIUS watch face"></div></div><div class="meta"><div><div class="code">CW·03</div><div class="name">RADIUS</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#versal" style="--c:var(--cw-pink)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/versal.jpg" data-night="assets/faces/versal-light.jpg" alt="VERSAL watch face"></div></div><div class="meta"><div><div class="code">CW·04</div><div class="name">VERSAL</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#vokab" style="--c:var(--cw-cyan)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/vokab.jpg" alt="VOKAB watch face"></div></div><div class="meta"><div><div class="code">CW·05</div><div class="name">VOKAB</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#folio" style="--c:var(--cw-orange)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/folio.jpg" alt="FOLIO watch face"></div></div><div class="meta"><div><div class="code">CW·06</div><div class="name">FOLIO</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#fahrplan" style="--c:var(--cw-mono)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/fahrplan.jpg" data-night="assets/faces/fahrplan-light.jpg" alt="FAHRPLAN watch face"></div></div><div class="meta"><div><div class="code">CW·09</div><div class="name">FAHRPLAN</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+    <a class="face" href="#lunar" style="--c:var(--cw-pink)"><div class="device"><span class="tpl" data-tpl="free-black"></span><div class="screen"><img src="assets/faces/lunar.jpg" alt="LUNAR watch face"></div></div><div class="meta"><div><div class="code">CW·11</div><div class="name">LUNAR</div></div><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></div><span class="bar"></span></a>
+  </section>
+  </div>
+
+
+  <section class="wrap alerts" id="alerts" aria-labelledby="alerts-h">
+    <div class="alerts-box">
+      <div><span class="rule"></span><h2 id="alerts-h">New faces, first.</h2><p>One email when a new <b class="brand">colorwerk●</b> face lands. Nothing else.</p></div>
+      <form id="alerts-form" novalidate>
+        <label for="alerts-email" class="sr">Email address</label>
+        <input id="alerts-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <button type="submit" id="alerts-btn">Notify me <svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></button>
+      </form>
+      <div class="msg" id="alerts-msg" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav>
+      <a href="#faces">Faces</a><a href="#studio">Studio</a>
+      <span class="icons">
+        <a href="https://www.instagram.com/colorwerk.design/" target="_blank" rel="noopener" aria-label="colorwerk on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+      </span>
+    </nav>
+    <a class="logo" href="#" aria-label="colorwerk home"><svg class="wordmark" viewBox="0 0 812 134" role="img" aria-label="colorwerk"><path fill="currentColor" fill-rule="evenodd" d="M51.12 128.24C50.44 128.13 49.02 128.03 47.98 128.02C45.49 127.99 39.51 126.76 36.45 125.65C30.75 123.58 25.93 120.60 21.95 116.69C18.53 113.35 16.41 110.43 14.25 106.12C11.61 100.85 10.35 96.50 9.51 89.74C8.74 83.47 9.54 75.16 11.63 67.88C13.72 60.57 17.38 54.51 22.90 49.21C28.67 43.66 37.59 39.54 45.62 38.73C52.33 38.05 52.85 38.03 55.75 38.39C57.33 38.59 59.15 38.75 59.79 38.75C60.96 38.75 61.75 38.89 65.75 39.77C72.44 41.26 79.78 45.19 84.18 49.66C88.81 54.35 91.68 59.99 92.87 66.75C93.36 69.53 93.34 69.91 92.75 70.50C92.27 70.98 91.92 71.00 81.40 71.00C68.88 71.00 69.85 71.21 69.11 68.38C68.35 65.42 66.74 62.53 64.89 60.80C63.03 59.06 60.31 57.61 57.96 57.11C55.78 56.64 50.00 56.65 48.18 57.12C45.93 57.71 43.79 58.92 41.72 60.78C36.29 65.67 33.49 73.44 33.50 83.66C33.51 95.54 37.39 104.24 44.50 108.31C46.52 109.47 49.05 110.00 52.53 110.00C57.92 110.00 61.54 108.70 64.65 105.63C67.40 102.91 68.98 99.80 70.26 94.55C70.46 93.76 70.69 93.41 71.15 93.24C71.52 93.10 76.24 93.00 82.37 93.00C91.83 93.00 93.01 93.04 93.37 93.41C93.60 93.63 93.72 93.96 93.65 94.14C93.59 94.32 93.34 95.57 93.12 96.92C92.89 98.27 92.26 100.76 91.71 102.45C87.98 113.99 80.03 122.00 68.50 125.86C66.64 126.48 64.37 127.09 63.44 127.22C62.52 127.35 61.64 127.54 61.48 127.64C61.32 127.73 59.39 127.91 57.19 128.03C54.98 128.14 53.00 128.28 52.78 128.33C52.56 128.38 51.81 128.34 51.12 128.24ZM134.38 128.01C132.72 127.91 130.87 127.71 130.25 127.56C129.63 127.41 128.39 127.15 127.50 126.98C122.97 126.12 115.88 122.95 112.03 120.06C101.27 111.98 95.38 99.04 95.38 83.50C95.38 72.27 98.53 61.85 104.27 54.20C106.85 50.75 111.41 46.71 115.32 44.40C119.53 41.92 125.78 39.65 130.12 39.02C138.03 37.87 141.17 37.88 149.25 39.03C150.28 39.18 152.55 39.73 154.30 40.26C164.73 43.39 172.41 49.26 177.69 58.12C180.01 62.04 182.08 67.55 182.83 71.88C183.04 73.11 183.36 74.97 183.55 76.00C183.98 78.48 183.99 88.22 183.55 90.75C182.62 96.21 182.36 97.37 181.45 100.12C177.85 110.99 170.91 119.06 161.12 123.74C158.42 125.03 154.03 126.54 151.62 127.01C150.80 127.17 149.39 127.45 148.50 127.63C146.49 128.03 138.41 128.25 134.38 128.01ZM260.75 128.01C259.03 127.91 257.12 127.71 256.50 127.56C255.88 127.41 254.70 127.16 253.88 127.00C251.62 126.56 246.70 124.86 244.41 123.72C240.78 121.91 236.82 119.08 234.12 116.37C225.90 108.10 221.75 97.03 221.75 83.38C221.75 77.75 222.24 74.05 223.67 68.75C225.67 61.38 228.86 55.71 233.88 50.60C236.83 47.60 239.58 45.52 243.07 43.65C248.71 40.63 253.05 39.36 260.75 38.47C270.58 37.33 282.19 39.59 289.87 44.13C293.61 46.34 295.50 47.80 298.32 50.67C304.58 57.04 308.20 64.84 309.87 75.56C310.39 78.88 310.39 87.89 309.87 91.19C308.59 99.37 306.57 104.88 302.78 110.54C300.10 114.55 295.75 118.91 292.14 121.20C289.87 122.64 285.45 124.73 282.62 125.70C276.71 127.72 269.35 128.50 260.75 128.01ZM532.38 128.00C521.15 127.30 510.69 122.22 503.95 114.20C498.56 107.79 495.74 100.98 494.01 90.22C493.67 88.08 493.67 79.29 494.02 76.94C495.82 64.65 500.69 55.21 508.72 48.44C513.09 44.76 517.77 42.13 523.01 40.42C527.00 39.11 532.66 38.20 537.10 38.16C539.67 38.13 545.02 38.71 547.62 39.30C561.00 42.31 571.23 51.85 576.12 65.88C576.81 67.84 577.97 72.41 578.23 74.19C578.38 75.18 578.62 76.79 578.78 77.76C578.93 78.73 579.07 81.49 579.09 83.88C579.12 88.10 579.11 88.25 578.56 88.80L577.99 89.38L548.12 89.44L518.26 89.51L518.10 90.15C518.01 90.50 518.06 91.76 518.21 92.96C519.36 102.10 523.78 107.43 531.80 109.36C535.62 110.28 540.52 110.28 543.97 109.35C549.05 107.99 553.70 104.54 555.66 100.68C556.03 99.96 556.52 99.39 556.90 99.24C557.58 98.98 575.49 98.90 576.43 99.16C577.26 99.38 577.34 100.09 576.74 101.94C576.01 104.18 573.32 109.67 571.80 112.00C570.19 114.47 567.11 117.96 565.02 119.66C560.93 123.00 553.81 126.20 548.40 127.12C547.17 127.33 545.76 127.60 545.27 127.73C543.99 128.05 535.92 128.22 532.38 128.00ZM191.14 125.61C190.79 125.25 190.75 119.60 190.75 67.11C190.75 9.33 190.75 9.00 191.25 8.50C191.74 8.01 192.08 8.00 202.88 8.00C213.67 8.00 214.01 8.01 214.50 8.50C215.00 9.00 215.00 9.33 215.00 67.09C215.00 123.04 214.98 125.19 214.54 125.59C214.13 125.96 212.95 126.00 202.81 126.00C192.89 126.00 191.49 125.95 191.14 125.61ZM316.89 125.61C316.54 125.25 316.50 121.08 316.50 83.40C316.50 47.69 316.55 41.52 316.85 41.11C317.20 40.64 317.61 40.62 327.83 40.62C337.89 40.62 338.47 40.65 338.97 41.10C339.47 41.55 339.49 41.85 339.56 47.58C339.60 51.78 339.71 53.61 339.91 53.68C340.06 53.73 340.84 52.84 341.63 51.70C345.46 46.19 349.65 42.81 355.65 40.38C358.21 39.35 360.01 38.91 363.88 38.39C366.42 38.05 366.80 38.06 368.99 38.48C370.98 38.87 371.44 39.05 371.97 39.66L372.58 40.38L380.73 40.51C385.21 40.58 389.07 40.73 389.31 40.85C389.72 41.04 390.72 43.76 391.11 45.75C391.21 46.23 391.44 47.13 391.62 47.75C391.80 48.37 392.25 50.00 392.61 51.38C392.97 52.75 393.44 54.44 393.64 55.12C393.85 55.81 394.42 57.89 394.91 59.75C396.62 66.21 397.21 68.41 398.69 73.88C399.52 76.90 400.25 79.60 400.32 79.88C400.39 80.15 400.98 82.29 401.63 84.62C402.27 86.96 403.12 90.14 403.51 91.68C403.90 93.22 404.35 94.72 404.50 95.00C404.87 95.68 405.53 95.55 405.76 94.75C406.26 93.00 406.84 90.73 407.76 86.88C408.32 84.54 409.61 79.25 410.62 75.12C413.24 64.54 415.51 55.24 416.98 49.12C418.57 42.53 418.91 41.39 419.42 40.96C419.75 40.69 421.92 40.62 430.78 40.62C441.41 40.62 441.75 40.64 442.22 41.12C442.69 41.62 442.94 42.46 444.62 49.25C445.08 51.11 445.75 53.75 446.11 55.12C446.47 56.50 446.92 58.30 447.11 59.12C447.30 59.95 449.43 68.47 451.85 78.06C454.27 87.65 456.25 95.56 456.25 95.63C456.25 95.69 456.41 95.75 456.62 95.75C457.10 95.75 457.29 95.33 458.07 92.50C458.43 91.19 459.09 88.83 459.53 87.25C459.97 85.67 460.52 83.59 460.76 82.62C461.00 81.66 461.72 78.96 462.37 76.62C463.01 74.29 463.98 70.74 464.51 68.75C465.05 66.76 465.88 63.66 466.37 61.88C466.86 60.09 467.59 57.39 468.00 55.88C468.41 54.36 469.13 51.72 469.60 50.00C470.07 48.28 470.75 45.75 471.12 44.38C472.03 40.96 472.14 40.83 474.05 40.63C474.92 40.54 480.14 40.50 485.65 40.55C496.14 40.63 496.50 40.67 496.50 41.72C496.50 41.94 496.15 43.25 495.72 44.62C494.71 47.87 492.35 55.38 490.46 61.38C489.63 63.99 488.73 66.86 488.45 67.75C488.17 68.64 487.52 70.72 486.99 72.38C485.51 77.01 484.40 80.53 483.13 84.62C482.49 86.69 481.76 88.99 481.50 89.75C481.25 90.51 480.52 92.81 479.87 94.88C478.68 98.68 478.21 100.19 476.12 106.88C475.47 108.94 474.68 111.41 474.36 112.38C474.05 113.34 473.37 115.47 472.87 117.12C470.78 124.00 470.26 125.41 469.65 125.81C469.50 125.91 464.08 125.99 457.60 126.00C446.70 126.00 445.80 125.97 445.45 125.56C445.24 125.32 444.77 123.94 444.40 122.50C443.70 119.74 442.82 116.39 442.13 113.88C441.91 113.05 441.40 111.14 441.00 109.62C440.60 108.11 439.87 105.36 439.38 103.50C438.89 101.64 438.05 98.44 437.50 96.38C436.56 92.79 435.62 89.26 433.96 83.00C433.54 81.42 432.82 78.66 432.36 76.88C431.50 73.55 430.83 71.75 430.47 71.75C430.09 71.75 429.51 73.20 429.00 75.42C428.72 76.63 428.22 78.64 427.89 79.88C427.56 81.11 427.12 82.80 426.92 83.62C426.30 86.14 420.86 107.59 419.62 112.38C418.98 114.85 418.25 117.72 418.01 118.75C416.88 123.49 416.38 125.12 415.96 125.54C415.53 125.97 414.81 126.00 403.66 126.00C392.71 126.00 391.80 125.97 391.44 125.56C391.06 125.14 389.11 119.39 387.39 113.62C386.67 111.22 383.74 102.03 381.14 94.00C380.67 92.56 379.76 89.69 379.13 87.62C378.49 85.56 377.76 83.26 377.50 82.50C377.24 81.74 376.45 79.27 375.74 77.00C372.46 66.54 370.94 61.98 370.63 61.66C370.26 61.30 367.80 60.87 364.60 60.61C362.08 60.42 357.33 61.04 354.93 61.89C347.22 64.62 342.74 70.62 341.24 80.22C340.78 83.11 340.75 84.77 340.75 104.25C340.75 124.20 340.73 125.19 340.29 125.59C339.88 125.96 338.70 126.00 328.56 126.00C318.64 126.00 317.24 125.95 316.89 125.61ZM584.16 125.54C583.78 125.12 583.75 121.83 583.75 83.31C583.75 46.52 583.79 41.49 584.12 41.16C584.73 40.55 586.62 40.46 596.52 40.54C604.03 40.61 606.01 40.69 606.34 40.97C606.69 41.26 606.75 41.97 606.77 46.09C606.80 51.29 606.97 53.28 607.41 53.43C607.56 53.48 608.34 52.59 609.14 51.45C611.73 47.75 615.33 44.39 618.95 42.31C621.29 40.97 625.19 39.41 627.12 39.04C630.24 38.46 632.40 38.19 633.86 38.20C635.72 38.21 638.44 38.83 638.98 39.37C639.33 39.72 639.38 41.00 639.38 50.15C639.38 60.25 639.36 60.55 638.88 60.91C638.52 61.18 638.02 61.25 637.12 61.15C630.84 60.46 630.02 60.44 626.93 60.87C621.54 61.64 617.88 63.40 614.59 66.81C611.63 69.88 609.76 73.73 608.86 78.64C608.63 79.87 608.35 81.38 608.24 82.00C608.12 82.62 608.02 92.60 608.01 104.17C608.00 122.95 607.96 125.26 607.61 125.61C607.26 125.95 605.85 126.00 595.90 126.00C585.25 126.00 584.55 125.97 584.16 125.54ZM642.13 125.42C641.79 124.90 641.75 118.53 641.81 66.77C641.87 9.62 641.88 8.70 642.36 8.35C642.76 8.06 644.75 8.00 653.88 8.00C664.26 8.00 664.95 8.03 665.34 8.46C665.72 8.88 665.75 11.32 665.75 38.44C665.75 57.02 665.84 68.21 665.99 68.61C666.13 68.96 666.39 69.25 666.57 69.25C666.76 69.25 667.86 68.27 669.02 67.06C670.18 65.86 676.29 59.51 682.59 52.96C688.89 46.40 694.23 40.94 694.46 40.83C695.02 40.56 719.60 40.42 720.87 40.69C722.39 41.00 722.29 41.52 720.33 43.44C719.39 44.37 713.56 50.06 707.37 56.10C690.61 72.45 691.17 71.87 691.39 72.54C691.56 73.07 694.87 78.09 717.47 112.12C723.55 121.28 725.61 124.56 725.62 125.12L725.62 125.88L712.00 125.94C704.51 125.98 698.14 125.96 697.85 125.89C697.53 125.81 696.81 124.97 696.08 123.82C694.70 121.66 686.98 109.12 680.51 98.50C674.99 89.46 674.94 89.38 674.20 89.38C673.69 89.38 672.71 90.15 669.98 92.74C667.98 94.64 666.28 96.46 666.09 96.92C665.82 97.57 665.75 100.47 665.75 111.61C665.75 125.07 665.74 125.49 665.27 125.74C664.95 125.91 660.85 126.00 653.65 126.00L642.51 126.00L642.13 125.42ZM765.48 118.40C765.42 118.34 764.50 118.17 763.42 118.02C758.04 117.27 751.52 114.27 746.82 110.38C740.63 105.25 736.11 98.08 734.35 90.62C733.66 87.72 733.66 78.29 734.35 75.38C736.10 67.93 740.97 60.24 747.00 55.39C751.23 51.99 755.61 49.91 761.38 48.54C763.82 47.97 764.65 47.89 768.88 47.88C774.18 47.87 776.92 48.30 781.00 49.79C787.57 52.18 794.58 57.66 798.39 63.39C801.77 68.46 803.43 73.19 804.11 79.66C805.11 89.25 801.88 99.28 795.48 106.42C791.40 110.98 784.76 115.30 779.45 116.85C778.31 117.19 777.21 117.52 777.00 117.60C775.44 118.18 765.93 118.84 765.48 118.40ZM145.07 109.47C148.50 108.59 151.14 106.94 153.73 104.07C155.38 102.24 157.47 98.42 158.15 96.00C159.15 92.42 160.00 86.67 160.00 83.49C160.00 81.36 159.25 74.98 158.78 73.12C157.24 66.97 154.84 63.03 150.81 60.04C147.35 57.48 144.96 56.77 139.70 56.76C135.58 56.75 134.15 56.98 131.77 58.05C126.86 60.24 123.00 64.97 121.11 71.12C119.63 75.92 119.18 84.03 120.02 90.62C120.61 95.22 122.81 100.79 125.14 103.61C126.40 105.13 128.93 107.25 130.54 108.12C131.66 108.73 132.46 109.01 135.12 109.74C135.54 109.86 137.48 109.96 139.44 109.97C142.33 110.00 143.41 109.90 145.07 109.47ZM271.39 109.49C278.20 107.74 283.05 102.22 284.97 94.00C287.72 82.30 285.84 69.44 280.44 63.06C278.05 60.22 274.39 57.88 271.19 57.13C269.04 56.62 262.61 56.62 260.66 57.13C254.75 58.66 249.88 63.70 247.63 70.58C246.49 74.08 246.18 76.52 246.07 82.71C245.97 88.24 246.00 88.73 246.63 91.92C247.40 95.87 247.83 97.18 249.21 99.95C250.53 102.60 252.36 104.86 254.45 106.43C256.98 108.33 257.35 108.53 259.83 109.28C261.87 109.90 262.52 109.97 265.77 109.99C268.65 110.00 269.82 109.89 271.39 109.49ZM554.37 73.60C554.59 73.38 554.71 73.01 554.64 72.79C554.57 72.56 554.23 71.36 553.88 70.12C552.72 66.06 550.34 61.96 548.05 60.10C546.28 58.65 543.54 57.38 541.38 57.00C540.26 56.80 538.18 56.73 535.62 56.80C531.86 56.91 531.50 56.96 529.52 57.72C525.68 59.18 522.49 61.80 520.52 65.11C519.47 66.87 518.33 70.15 518.11 72.03C517.96 73.25 518.01 73.48 518.41 73.71C518.73 73.90 524.28 73.99 536.42 73.99C552.20 74.00 554.00 73.96 554.37 73.60Z"/></svg></a>
+  </div>
+</footer>
+
+<dialog class="fm" id="fm" aria-labelledby="fm-name">
+  <button class="fm-x" id="fm-x" aria-label="Close"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 2l14 14M16 2 2 16"/></svg></button>
+  <div class="fm-in">
+    <div class="fm-art"><div class="device"><span class="tpl" id="fm-tpl"></span><div class="screen"><img id="fm-img" alt=""><div class="ph" id="fm-ph" hidden><span></span><small></small></div></div></div><div class="fm-vars" id="fm-vars" hidden></div><button type="button" class="fm-wake" id="fm-wake" hidden><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>AOD to wake</button></div>
+    <div class="fm-body">
+      <div class="fm-code" id="fm-code"></div>
+      <h2 id="fm-name"></h2>
+      <span class="fm-bar"></span>
+      <p class="fm-desc" id="fm-desc"></p>
+      <ul class="fm-chips" id="fm-spec"></ul>
+      <a class="fm-get" id="fm-get" href="#" target="_blank" rel="noopener"><img class="ciq ciq-b" src="assets/connect-iq-badge-black.svg" alt="Available on Connect IQ"><img class="ciq ciq-w" src="assets/connect-iq-badge-white.svg" alt=""><span id="fm-get-label" class="fm-get-note"></span></a>
+      <div class="fm-nav">
+        <button class="back" id="fm-prev"><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg><span></span></button>
+        <button id="fm-next"><span></span><svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+// Face copy lives here, keyed by the card's #hash. Images are read from the grid cards
+// so the base64 data isn't embedded twice. Copy is placeholder until Jim writes the real blurbs.
+// store: Connect IQ URL per face — '#' until the listings go live.
+// One entry per card, keyed by the card's #hash, in page order (drives prev/next).
+// desc/spec: empty = "coming soon" in the popup. Specs for RASTER, VERSAL and FUNKHAUS come from their Connect IQ listings.
+// store: Connect IQ URL, '#' = not live yet (button shows "Coming soon").
+// variants: optional face colourways shown as round thumbnails (the device template stays the same).
+const FACES = {
+  "folio-pro":{"code": "CW·07", "name": "FOLIO", "pro": true, "c": "var(--cw-orange)", "store": "https://apps.garmin.com/apps/e4f8acea-931e-41fa-a597-b80368b9cb1e", "desc": "FOLIO with a six-slot ring of data around the edge, in digital or analogue.", "spec": ["6 data slots", "14 data points", "Digital or analogue", "3 hand styles", "Multiple time zones", "8 languages", "Accent colours", "AMOLED"], "sub": "pro","variants":[["Digital", "assets/faces/folio-pro.jpg"], ["Analogue", "assets/faces/folio-pro-analog.jpg"]]},
+  "versal-pro":{"code": "CW·08", "name": "VERSAL", "pro": true, "c": "var(--cw-pink)", "store": "https://apps.garmin.com/apps/c2e6292f-5d32-4c7c-821f-e0b38a95fa26", "desc": "VERSAL with a data system. The time in words, plus up to three data slots underneath.", "spec": ["Time in words", "Up to 3 data slots", "Optional seconds", "6 languages", "17 accent colours", "Dark / light", "4 battery styles", "Notifications"], "sub": "pro","variants":[["Dark", "assets/faces/versal-pro.jpg"], ["Light", "assets/faces/versal-pro-light.jpg"]]},
+  "fahrplan-pro":{"code": "CW·10", "name": "FAHRPLAN", "pro": true, "c": "var(--cw-mono)", "store": "https://apps.garmin.com/apps/cd981eaf-fe15-4d89-beeb-b194b6ab2ab7", "desc": "The railway clock with data. Two slots, three hand styles and colours matched to Garmin bands.", "spec": ["2 data slots", "16 data points", "3 hand styles", "12 band colours", "Optional seconds", "Weather", "Notifications"], "sub": "pro","variants":[["Dark", "assets/faces/fahrplan-pro.jpg"], ["Light", "assets/faces/fahrplan-pro-light.jpg"]]},
+  "raster-pro":{"code": "CW·12", "name": "RASTER", "pro": true, "c": "var(--cw-cyan)", "store": "https://apps.garmin.com/apps/6abf0fe7-bdd7-41d0-9610-ff61a60fad93", "desc": "Everything you asked for in RASTER. A big data slot beside the time for weather, data or a progress ring, up to three slots below, and more ways to lay it out.", "spec": ["Big data slot", "3 data slots", "20 data points", "Progress rings", "Seconds ring", "Mirror layout", "Light weight", "3 battery styles"], "sub": "pro","variants":[["Dark", "assets/faces/raster-pro.jpg"], ["Light", "assets/faces/raster-pro-light.jpg"], ["Thin", "assets/faces/raster-pro-thin.jpg"]]},
+  "funkhaus":{"code": "CW·01", "name": "FUNKHAUS", "pro": false, "c": "var(--cw-orange)", "store": "https://apps.garmin.com/en-US/apps/1f8c5385-43d9-4b47-90fd-6cffb813fe92", "desc": "A radio studio clock for the wrist, after the clocks at Funkhaus Nalepastraße on the Spree.", "spec": ["7-segment time", "60-dot seconds ring", "Always-on", "True-black AMOLED", "LCD light mode", "Accent colours"],"variants":[["Dark", "assets/faces/funkhaus.jpg"], ["Light", "assets/faces/funkhaus-light.jpg"]]},
+  "raster":{"code": "CW·02", "name": "RASTER", "pro": false, "c": "var(--cw-cyan)", "store": "https://apps.garmin.com/en-US/apps/c6ce07cf-f713-4a44-b84c-68d18bb66d0d", "desc": "Swiss grid typography after Müller-Brockmann. Big hours and minutes, with date, weather and data locked to the grid.", "spec": ["2 data slots", "13 metrics", "Weather", "Accent minutes", "Multilingual date"],"variants":[["Dark", "assets/faces/raster.jpg"], ["Light", "assets/faces/raster-light.jpg"]]},
+  "radius":{"code": "CW·03", "name": "RADIUS", "pro": false, "c": "var(--cw-mono)", "store": "https://apps.garmin.com/apps/31b568bb-d1ca-4e37-b526-ff7d493d6f6f", "desc": "A simple Swiss analogue dial. Twelve markers, two hands, and an always-on display that looks exactly like the full one.", "spec": ["Analogue", "1 data slot", "4 metrics", "Progress ring", "Full-power AOD", "Light / dark", "8 languages", "AMOLED"],"variants":[["Dark", "assets/faces/radius.jpg"], ["Light", "assets/faces/radius-light.jpg"]]},
+  "versal":{"code": "CW·04", "name": "VERSAL", "pro": false, "c": "var(--cw-pink)", "store": "https://apps.garmin.com/en-US/apps/6a274261-8800-478a-b81a-b944d9f117de", "desc": "The time in words, set on a modernist grid.", "spec": ["Time in words", "AMOLED + MIP layouts", "Weather", "Dark / light", "Accent colours", "12/24h"],"variants":[["Dark", "assets/faces/versal.jpg"], ["Light", "assets/faces/versal-light.jpg"]]},
+  "vokab":{"code": "CW·05", "name": "VOKAB", "pro": false, "c": "var(--cw-cyan)", "store": "https://apps.garmin.com/apps/7ca774b5-e42d-4804-a12c-0a4799e9c167", "desc": "One German word a day, with its English translation, right on your wrist.", "spec": ["1 word a day", "CEFR A1–B1", "Nouns, verbs, adjectives", "Pick your topics", "Skip words", "AMOLED"]},
+  "folio":{"code": "CW·06", "name": "FOLIO", "pro": false, "c": "var(--cw-orange)", "store": "https://apps.garmin.com/apps/f10d54af-efed-4e29-9891-6904043d490b", "desc": "Oversized numerals with the presence of a poster. Time first, nothing else in the way.", "spec": ["Oversized digits", "12/24h", "Optional date", "Accent colours", "AMOLED"]},
+  "fahrplan":{"code": "CW·09", "name": "FAHRPLAN", "pro": false, "c": "var(--cw-mono)", "store": "https://apps.garmin.com/apps/a42d4e0c-dfcb-44c3-8130-bb87c8649f38", "desc": "A railway clock after the Swiss and German station dials, with digital time beside it and the loop seconds hand.", "spec": ["Analogue + digital", "Loop seconds hand", "Date", "Light / dark", "Accent colours"],"variants":[["Dark", "assets/faces/fahrplan.jpg"], ["Light", "assets/faces/fahrplan-light.jpg"]]},
+  "lunar":{"code": "CW·11", "name": "LUNAR", "pro": false, "c": "var(--cw-pink)", "store": "https://apps.garmin.com/apps/a63bbabb-e834-4d83-b453-fdd2d99cbc9a", "desc": "A large, detailed Moon that follows the real phase, with moonrise and the next full moon.", "spec": ["Live moon phase", "Moonrise", "Next full moon", "Wake animation", "Hemisphere aware", "8 languages", "AMOLED"],"wake":true}
+};
+const ORDER = Object.keys(FACES); // same order as the grid
+const dlg = document.getElementById('fm');
+const $ = id => document.getElementById(id);
+let current = null;
+
+function fill(id){
+  const f = FACES[id]; current = id;
+  // popup mirrors the card: same device template + same face art
+  const card = document.querySelector('.face[href="#'+id+'"]');
+  const tpl = card && card.querySelector('.tpl'), art = card && card.querySelector('.screen img');
+  $('fm-tpl').dataset.tpl = tpl ? tpl.dataset.tpl : '';
+  $('fm-img').hidden = !art; $('fm-ph').hidden = !!art;
+  if(art){ $('fm-img').src = art.src; $('fm-img').alt = art.alt; }
+  else { $('fm-ph').querySelector('span').textContent = f.name; $('fm-ph').querySelector('small').textContent = f.code; }
+  $('fm-code').textContent = f.code + (f.pro ? ' · Pro face' : ' · Free face');
+  $('fm-name').textContent = f.name;
+  if(f.sub){ const em=document.createElement('em'); em.textContent=f.sub; $('fm-name').append(em); }
+  const vars=$('fm-vars'); vars.innerHTML=''; vars.hidden=!f.variants;
+  const cur=(f.variants||[]).findIndex(([,src])=>art&&art.src===src);
+  (f.variants||[]).forEach(([label,src],k)=>{
+    const b=document.createElement('button'); b.type='button'; b.setAttribute('aria-pressed',k===(cur<0?0:cur));
+    b.innerHTML='<img alt=""><span></span>'; b.querySelector('img').src=src; b.querySelector('span').textContent=label;
+    b.addEventListener('click',()=>{ $('fm-img').src=src; $('fm-img').alt=f.name+' '+label;
+      vars.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); });
+    vars.append(b);
+  });
+  $('fm-wake').hidden = !f.wake;
+  $('fm-desc').textContent = f.desc || 'Details coming soon.';
+  const chips = f.spec.length ? f.spec : ['Specs coming soon'];
+  $('fm-spec').innerHTML = ''; $('fm-spec').classList.toggle('is-soon', !f.spec.length);
+  chips.forEach(s => { const li = document.createElement('li'); li.textContent = s; $('fm-spec').append(li); });
+  const live = f.store && f.store !== '#';
+  $('fm-get').href = live ? f.store : '#';
+  $('fm-get').classList.toggle('is-soon', !live);
+  if(live){ $('fm-get').removeAttribute('aria-disabled'); } else { $('fm-get').setAttribute('aria-disabled','true'); }
+  $('fm-get-label').textContent = !live ? 'Coming soon' : (f.pro ? '' : 'Free');
+  dlg.style.setProperty('--c', f.c);
+  const i = ORDER.indexOf(id);
+  const prev = ORDER[(i - 1 + ORDER.length) % ORDER.length], next = ORDER[(i + 1) % ORDER.length];
+  const label = x => FACES[x].name + (FACES[x].sub ? ' PRO' : '');
+  $('fm-prev').querySelector('span').textContent = label(prev);
+  $('fm-next').querySelector('span').textContent = label(next);
+  $('fm-prev').dataset.go = prev; $('fm-next').dataset.go = next;
+  // replaceState so each face has a shareable #link without stacking history entries
+  try { history.replaceState(null, '', '#' + id); } catch(e) {}
+}
+function openFace(id){
+  if(!FACES[id]) return;
+  fill(id);
+  if(!dlg.open){ dlg.showModal(); document.documentElement.classList.add('locked'); }
+  dlg.scrollTop = 0;
+}
+function closeFace(){ if(dlg.open) dlg.close(); }
+
+dlg.addEventListener('close', () => {
+  document.documentElement.classList.remove('locked');
+  try { history.replaceState(null, '', location.pathname + location.search); } catch(e) {}
+  const card = document.querySelector('.face[href="#'+current+'"]');
+  if(card) card.focus({preventScroll:true}); // hand focus back to the card that opened it
+});
+document.querySelectorAll('.face').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault(); openFace(a.getAttribute('href').slice(1));
+}));
+$('fm-x').addEventListener('click', closeFace);
+const WAKE_GIF = 'assets/faces/lunar-wake.gif', WAKE_MS = 6000;   // GIF runtime; it ends on the AOD frame
+let wakeTimer = null;
+$('fm-wake').addEventListener('click', () => {
+  const img = $('fm-img'); if(!img.dataset.still) img.dataset.still = img.src;
+  clearTimeout(wakeTimer);
+  img.src = ''; img.src = WAKE_GIF;                   // reassigning restarts the GIF from frame one
+  wakeTimer = setTimeout(() => { img.src = img.dataset.still; delete img.dataset.still; }, WAKE_MS);
+});
+dlg.addEventListener('close', () => { clearTimeout(wakeTimer); const img = $('fm-img'); if(img.dataset.still){ img.src = img.dataset.still; delete img.dataset.still; } });
+$('fm-prev').addEventListener('click', e => openFace(e.currentTarget.dataset.go));
+$('fm-next').addEventListener('click', e => openFace(e.currentTarget.dataset.go));
+// click on the backdrop lands on the <dialog> itself, since .fm-in fills the whole box
+dlg.addEventListener('click', e => { if(e.target === dlg) closeFace(); });
+$('fm-get').addEventListener('click', e => { if($('fm-get').classList.contains('is-soon')) e.preventDefault(); });
+dlg.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight') $('fm-next').click();
+  if(e.key === 'ArrowLeft') $('fm-prev').click();
+});
+// In-page anchors ease down to their section (custom easing, and the URL hash is left alone so the
+// artifact host doesn't treat it as navigation). Face cards are excluded: they open the popup instead.
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function easeTo(y){
+  const start = scrollY, dist = y - start;
+  if(reduceMotion || Math.abs(dist) < 2){ scrollTo(0, y); return; }
+  const dur = Math.min(1100, Math.max(550, Math.abs(dist) * 0.45)), t0 = performance.now();
+  const ease = p => p < .5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;   // easeInOutCubic
+  (function step(now){ const p = Math.min(1, (now - t0) / dur); scrollTo(0, start + dist * ease(p)); if(p < 1) requestAnimationFrame(step); })(t0);
+}
+document.querySelectorAll('a[href^="#"]:not(.face)').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href').slice(1);
+  if(!id){ e.preventDefault(); easeTo(0); return; }            // logo → top
+  const el = document.getElementById(id); if(!el) return;
+  e.preventDefault();
+  easeTo(el.getBoundingClientRect().top + scrollY - (parseFloat(getComputedStyle(el).scrollMarginTop) || 0));
+}));
+
+// Hero variant switch (prototype): Photo vs live Clock. Choice is remembered per browser.
+const hero = $('hero');
+(function buildTicks(){
+  const g = $('ticks'), NS = 'http://www.w3.org/2000/svg';
+  for(let i = 0; i < 60; i++){
+    const big = i % 5 === 0, r = document.createElementNS(NS, 'rect');
+    const len = big ? (i % 15 === 0 ? 120 : 92) : 34, w = big ? 18 : 6;
+    r.setAttribute('x', -w/2); r.setAttribute('y', -455); r.setAttribute('width', w); r.setAttribute('height', len);
+    r.setAttribute('fill', big ? '#f4f2ee' : '#bdbab5'); r.setAttribute('transform', 'rotate(' + i*6 + ')');
+    g.appendChild(r);
+  }
+})();
+let clockTimer = null, lastSec = null;
+(function wallTicks(){   // indices for the photo's wall clock, matched to the painted ones
+  const g = $('wticks'), NS = 'http://www.w3.org/2000/svg';
+  for(let i = 0; i < 60; i++){
+    const big = i % 5 === 0, r = document.createElementNS(NS, 'rect');
+    const w = big ? 3.4 : 1.2, len = big ? 19 : 8;
+    r.setAttribute('x', -w/2); r.setAttribute('y', -92); r.setAttribute('width', w); r.setAttribute('height', len);
+    r.setAttribute('class', big ? 'wink' : 'wtick'); // colours come from CSS: light on the black day dial, dark on the white night dial
+    r.setAttribute('transform', 'rotate(' + i*6 + ')');
+    g.appendChild(r);
+  }
+})();
+// both clocks (photo wall clock + big dial) share one tick; each id pair is [big dial, wall clock]
+function setHand(id, deg, anim){ [id, id.replace('h-', 'w-')].forEach(x => { const el = $(x); if(!el) return; el.classList.toggle('no-anim', !anim); el.style.transform = 'rotate(' + deg + 'deg)'; }); }
+function tick(first){
+  const d = new Date(), s = d.getSeconds(), m = d.getMinutes() + s/60, h = (d.getHours() % 12) + m/60;
+  // cumulative seconds angle so 59→0 keeps moving forward instead of spinning back
+  const total = Math.floor(Date.now()/1000);
+  setHand('h-sec', total * 6, !first);
+  setHand('h-min', (Math.floor(Date.now()/60000)) * 6 + (s/60)*6, !first);
+  setHand('h-hr', Math.floor(Date.now()/3600000 - d.getTimezoneOffset()/60) * 30 + (m/60)*30, !first);
+}
+function startClock(){ if(clockTimer) return; tick(true); const align = 1000 - (Date.now() % 1000);
+  clockTimer = setTimeout(function loop(){ tick(false); clockTimer = setTimeout(loop, 1000 - (Date.now() % 1000)); }, align); }
+function stopClock(){ clearTimeout(clockTimer); clockTimer = null; }
+// Day / Night: flips the whole site (tokens, hero photo, device shots). Remembered per browser;
+// first visit follows the viewer's system setting. (The big-dial .is-clock hero is parked, not wired up.)
+function setMode(v){
+  document.documentElement.classList.toggle('night', v === 'night');
+  // light/dark face art: any face image with data-night swaps to it at night (add the attribute when the dark/light versions exist)
+  document.querySelectorAll('img[data-night]').forEach(img => { if(!img.dataset.day) img.dataset.day = img.src; img.src = v === 'night' ? img.dataset.night : img.dataset.day; });
+  document.querySelectorAll('.mode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === v));
+  try { localStorage.setItem('cw-mode', v); } catch(e) {}
+}
+document.querySelectorAll('.mode button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+let savedMode = null; try { savedMode = localStorage.getItem('cw-mode'); } catch(e) {}
+// Intro: every load opens at night (moon), then flicks to day after a beat. Someone who chose night stays there.
+document.documentElement.classList.add('night'); document.querySelectorAll('.mode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === 'night'));
+setTimeout(() => setMode(savedMode === 'night' ? 'night' : 'day'), reduceMotion ? 0 : 1400);
+startClock();
+
+// Free-faces rail: arrow buttons page by two cards; disabled at either end.
+const rail = $('rail');
+function railState(){ $('rail-prev').disabled = rail.scrollLeft < 4; $('rail-next').disabled = rail.scrollLeft + rail.clientWidth > rail.scrollWidth - 4; }
+function railBy(dir){ const card = rail.querySelector('.face'); rail.scrollBy({left: dir * card.getBoundingClientRect().width * 2, behavior: reduceMotion ? 'auto' : 'smooth'}); }
+$('rail-prev').addEventListener('click', () => railBy(-1));
+$('rail-next').addEventListener('click', () => railBy(1));
+rail.addEventListener('scroll', railState, {passive:true}); addEventListener('resize', railState); railState();
+
+// Alerts sign-up. In this artifact, addresses are saved to the page's db (signups/<viewer id>) — Jim reads
+// them from there; nothing is emailed automatically. On the live site, swap save() for a mail provider
+// (Buttondown / Mailchimp / Formspree) — see backlog.
+const dbP = (async () => { try { return await claude.use('db'); } catch(e) { return null; } })();
+const userP = (async () => { try { return await claude.use('user'); } catch(e) { return null; } })();
+$('alerts-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const input = $('alerts-email'), msg = $('alerts-msg'), btn = $('alerts-btn');
+  const email = input.value.trim();
+  msg.className = 'msg';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ msg.textContent = 'Enter an email address like name@example.com.'; input.focus(); return; }
+  btn.disabled = true; msg.textContent = 'Saving…';
+  try {
+    const [db, user] = await Promise.all([dbP, userP]);
+    const uid = user && await user.id();
+    if(!db || !uid) throw new Error('unavailable');
+    await db.doc('signups/' + uid).set({ email, at: new Date().toISOString() });
+    msg.className = 'msg ok'; msg.textContent = "You're on the list. We'll email you when a new face is out.";
+    input.value = '';
+  } catch(err) {
+    msg.textContent = "Sign-up opens soon.";
+  } finally { btn.disabled = false; }
+});
+
+// open straight to a face if the link carries its #name
+const startFace = location.hash.slice(1);
+if(FACES[startFace]) openFace(startFace);
+</script>
+
+</body>
+</html>
