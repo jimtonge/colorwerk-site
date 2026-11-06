@@ -344,10 +344,19 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
   .face:nth-child(2n+1){padding-left:0}
   .face:nth-child(2n){padding-right:0}
   .name{font-size:15px;letter-spacing:.12em}
-  /* phone: the shoe pile lands under the headline, so a soft wall-coloured wash sits behind the text block */
-  .hero{background-image:radial-gradient(120% 60% at 10% 62%,rgba(214,200,186,.86),rgba(214,200,186,.6) 45%,rgba(214,200,186,0) 80%),var(--hero-img);background-position:0 0,calc(var(--hx) * 100%) 50%;background-size:auto,cover;--hx:.82}
-  .wall-face{--wx:1020;--wy:255;--wf:50} /* phone crop: on the wall left of the door, between the nav and the headline */
-  .hero-night{background-image:radial-gradient(120% 60% at 10% 62%,rgba(24,24,28,.85),rgba(24,24,28,.6) 45%,rgba(24,24,28,0) 80%),var(--hero-night);background-position:0 0,calc(var(--hx) * 100%) 50%;background-size:auto,cover}
+  /* phone hero: the photo is zoomed out and sits at the bottom; the wall colour continues above it, so the headline sits in plain
+     wall instead of over the shoes (no whitening wash needed). --ih = displayed photo height; clock + headline are placed on the wall. */
+  .hero{--ih:380px;--hx:.95;--wallc:#b9a290;--wallc0:rgba(185,162,144,0);min-height:620px;background-color:var(--wallc);
+    background-image:linear-gradient(to bottom,var(--wallc) calc(100% - var(--ih)),var(--wallc0) calc(100% - var(--ih) + 48px)),var(--hero-img);
+    background-position:0 0,calc(var(--hx) * 100%) 100%;background-size:100% 100%,auto var(--ih);background-repeat:no-repeat}
+  .hero-night{--wallc:#3b393e;--wallc0:rgba(59,57,62,0);background-color:var(--wallc);
+    background-image:linear-gradient(to bottom,var(--wallc) calc(100% - var(--ih)),var(--wallc0) calc(100% - var(--ih) + 48px)),var(--hero-night);
+    background-position:0 0,calc(var(--hx) * 100%) 100%;background-size:100% 100%,auto var(--ih);background-repeat:no-repeat}
+  .hero-body{margin-top:0;flex:1;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding-block:26px 30px}
+  .hero h1{margin:0 0 46px}
+  /* clock: bigger, on the wall under the headline; photo is bottom-anchored here, so the vertical maths changes too */
+  .wall-face{--s:calc(var(--ih) / 1003);--wx:879;--wy:290;--wf:137;
+    top:calc(100cqh - 1003 * var(--s) + (var(--wy) - 1.6 * var(--wf)) * var(--s))}
   .hero.is-clock{background:var(--night)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
