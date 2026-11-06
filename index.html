@@ -329,9 +329,9 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
 }
 @media (max-width:520px){
   :root{--logo-h:14px;--nav-pad:18px}
-  /* phone: logo row goes on top so the stripe can stay centred on it; stripe is cut to that row's height */
+  /* phone: logo row goes on top, links below with clear air between; the stripe runs the full footer height */
   footer .logo{order:-1;width:100%;justify-content:flex-end}
-  footer::after{bottom:auto;height:calc(104px + var(--logo-h))}
+  footer .wrap{row-gap:40px;padding-block:44px}
   .nav ul{display:none} /* phone: menu lives in the footer; the floating day/night toggle takes this slot */
   .hero h1{max-width:7em;font-size:38px} /* longer line: smaller on phone so it stays at 4 lines */
   /* clock on phone: quarter dial in a panel above the text, centre at the panel's bottom-right (ref mock) */
@@ -505,7 +505,7 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
 <footer>
   <div class="wrap">
     <nav>
-      <a href="#pro">Pro Faces</a><a href="#free">Free Faces</a><a href="#studio">Studio</a>
+      <a href="#pro">Pro Faces</a><a href="#free">Free Faces</a>
       <span class="icons">
         <a href="https://www.instagram.com/colorwerk.design/" target="_blank" rel="noopener" aria-label="colorwerk on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
       </span>
