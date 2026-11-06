@@ -344,19 +344,12 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
   .face:nth-child(2n+1){padding-left:0}
   .face:nth-child(2n){padding-right:0}
   .name{font-size:15px;letter-spacing:.12em}
-  /* phone hero: the photo is zoomed out and sits at the bottom; the wall colour continues above it, so the headline sits in plain
-     wall instead of over the shoes (no whitening wash needed). --ih = displayed photo height; clock + headline are placed on the wall. */
-  .hero{--ih:380px;--hx:.95;--wallc:#b9a290;--wallc0:rgba(185,162,144,0);min-height:620px;background-color:var(--wallc);
-    background-image:linear-gradient(to bottom,var(--wallc) calc(100% - var(--ih)),var(--wallc0) calc(100% - var(--ih) + 48px)),var(--hero-img);
-    background-position:0 0,calc(var(--hx) * 100%) 100%;background-size:100% 100%,auto var(--ih);background-repeat:no-repeat}
-  .hero-night{--wallc:#3b393e;--wallc0:rgba(59,57,62,0);background-color:var(--wallc);
-    background-image:linear-gradient(to bottom,var(--wallc) calc(100% - var(--ih)),var(--wallc0) calc(100% - var(--ih) + 48px)),var(--hero-night);
-    background-position:0 0,calc(var(--hx) * 100%) 100%;background-size:100% 100%,auto var(--ih);background-repeat:no-repeat}
-  .hero-body{margin-top:0;flex:1;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding-block:26px 30px}
-  .hero h1{margin:0 0 46px}
-  /* clock: bigger, on the wall under the headline; photo is bottom-anchored here, so the vertical maths changes too */
-  .wall-face{--s:calc(var(--ih) / 1003);--wx:879;--wy:290;--wf:137;
-    top:calc(100cqh - 1003 * var(--s) + (var(--wy) - 1.6 * var(--wf)) * var(--s))}
+  /* phone hero: photo exactly as the desktop crop (cover, no wash). The headline sits in the empty wall at the top, the clock is
+     bigger and hangs on the wall under it (between headline and shoe pile), the link is lower down. */
+  .hero{--hx:.82}
+  .hero-body{margin-top:0;flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding-block:14px 26px}
+  .hero h1{margin:0}
+  .wall-face{--wx:904;--wy:548;--wf:100} /* centre on the wall left of the door, clear of the headline above and the shoes below */
   .hero.is-clock{background:var(--night)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
