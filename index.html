@@ -341,7 +341,7 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
 @media (max-width:520px){
   :root{--logo-h:14px;--nav-pad:18px}
   /* phone: logo row goes on top, links below with clear air between; the stripe runs the full footer height */
-  footer .logo{order:-1;width:100%;justify-content:flex-end}
+  footer .logo{order:-1;width:100%;justify-content:flex-start;margin-left:0} /* shares the left edge with the links and the page text */
   footer .wrap{row-gap:40px;padding-block:44px}
   .nav ul{display:none} /* phone: menu lives in the footer; the floating day/night toggle takes this slot */
   .hero h1{max-width:7em;font-size:38px} /* longer line: smaller on phone so it stays at 4 lines */
