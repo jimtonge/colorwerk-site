@@ -498,6 +498,7 @@ html.locked{overflow:hidden}  /* stop the page scrolling behind the open dialog 
       <form id="alerts-form" novalidate>
         <label for="alerts-email" class="sr">Email address</label>
         <input id="alerts-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <input id="alerts-hp" name="_honey" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <button type="submit" id="alerts-btn">Notify me <svg class="arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></button>
       </form>
       <div class="msg" id="alerts-msg" role="status" aria-live="polite"></div>
@@ -748,8 +749,9 @@ rail.addEventListener('scroll', railState, {passive:true}); addEventListener('re
 // Alerts sign-up. In this artifact, addresses are saved to the page's db (signups/<viewer id>) — Jim reads
 // them from there; nothing is emailed automatically. On the live site, swap save() for a mail provider
 // (Buttondown / Mailchimp / Formspree) — see backlog.
-const dbP = (async () => { try { return await claude.use('db'); } catch(e) { return null; } })();
-const userP = (async () => { try { return await claude.use('user'); } catch(e) { return null; } })();
+// Sign-ups are emailed to the studio inbox by FormSubmit (https://formsubmit.co). After the one-time activation email,
+// swap SIGNUP_ENDPOINT for the random alias FormSubmit gives, so the real address isn't in the page source.
+const SIGNUP_ENDPOINT = 'https://formsubmit.co/ajax/hello@colorwerk.design';
 $('alerts-form').addEventListener('submit', async e => {
   e.preventDefault();
   const input = $('alerts-email'), msg = $('alerts-msg'), btn = $('alerts-btn');
@@ -758,14 +760,18 @@ $('alerts-form').addEventListener('submit', async e => {
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ msg.textContent = 'Enter an email address like name@example.com.'; input.focus(); return; }
   btn.disabled = true; msg.textContent = 'Saving…';
   try {
-    const [db, user] = await Promise.all([dbP, userP]);
-    const uid = user && await user.id();
-    if(!db || !uid) throw new Error('unavailable');
-    await db.doc('signups/' + uid).set({ email, at: new Date().toISOString() });
+    if($('alerts-hp').value) throw new Error('bot');             // honeypot: real visitors never fill this
+    const r = await fetch(SIGNUP_ENDPOINT, {
+      method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify({ email, _subject: 'colorwerk newsletter sign-up', _template: 'basic', _captcha: 'false',
+        message: 'Please add this address to the new-faces list.', page: location.href, at: new Date().toISOString() })
+    });
+    const j = await r.json().catch(() => ({}));
+    if(!r.ok || j.success === 'false' || j.success === false) throw new Error('rejected');
     msg.className = 'msg ok'; msg.textContent = "You're on the list. We'll email you when a new face is out.";
     input.value = '';
   } catch(err) {
-    msg.textContent = "Sign-up opens soon.";
+    msg.textContent = "Couldn't save that just now. Please try again, or email hello@colorwerk.design.";
   } finally { btn.disabled = false; }
 });
 
