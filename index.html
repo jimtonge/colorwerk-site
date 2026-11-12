@@ -568,6 +568,20 @@ const dlg = document.getElementById('fm');
 const $ = id => document.getElementById(id);
 let current = null;
 
+// GoatCounter events (no-op until/unless count.js has loaded): which links people click and which faces they open.
+//   store/<face>  = Connect IQ store button in a popup     out/<host> = any other outbound link (Instagram, TikTok)
+//   face/<face>   = a watch popup opened
+function gcEvent(path, title){
+  try { if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path, title: title || path, event: true}); } catch(e){}
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('a[href]'); if(!a) return;
+  let u; try { u = new URL(a.href, location.href); } catch(_) { return; }
+  if(u.origin === location.origin) return;                       // only outbound links
+  if(a.id === 'fm-get' && current) gcEvent('store/' + current, (FACES[current].name + (FACES[current].pro ? ' PRO' : '')) + ' \u2192 Connect IQ store');
+  else gcEvent('out/' + u.hostname.replace(/^www\./, ''), a.getAttribute('aria-label') || u.hostname);
+}, true);
+
 function fill(id){
   const f = FACES[id]; current = id;
   // popup mirrors the card: same device template + same face art
@@ -619,6 +633,7 @@ function fill(id){
 function openFace(id){
   if(!FACES[id]) return;
   fill(id);
+  gcEvent('face/' + id, FACES[id].name + (FACES[id].pro ? ' PRO' : '') + ' popup');
   if(!dlg.open){ dlg.showModal(); document.documentElement.classList.add('locked'); }
   dlg.scrollTop = 0;
 }
